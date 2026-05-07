@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-#   MorceNOX CAT-Reader (C-Art Text Reader)™
+#   MorceNOX Art-Reader™
 #
 #   Copyright (C) 2026 Amilcar Antonio Mesquita Rizk <amilcar.rizk@gmail.com>
 #
@@ -19,21 +19,18 @@
 #
 
 APP_NAME="cat-reader"
-HOME_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}"
+
+CONFIG_DIR="$HOME/.config/$APP_NAME"
+MODELS_DIR="$CONFIG_DIR/models"
+OUT_TXT="$CONFIG_DIR/out_txt"
 
 # O endereço exato será "injetado" aqui durante a instalação
 INSTALL_PREFIX="/usr/local"
 
-DATADIR="$INSTALL_PREFIX/share/$APP_NAME"
-CONFIG_DIR="$HOME_CONFIG/$APP_NAME"
-
-MODELS_DIR="$DATADIR/models"
-OUT_TXT="$DATADIR/out_txt"
-
-# Detect if cat-reader-engine is in PATH, otherwise use the local version
-CORE_BINARY=$(command -v "${INSTALL_PREFIX}"/libexec/"${APP_NAME}"-engine 2>/dev/null || echo "./"${APP_NAME}"-engine")
-ASCII_IMAGE_EXE=$(command -v "${INSTALL_PREFIX}"/ascii-image-converter 2>/dev/null || echo "./ascii-image-converter")
-PY_SPLIT_EXE=$(command -v "${INSTALL_PREFIX}"/libexec/split_sentences 2>/dev/null || echo "./split_sentences.py")
+# Detect if ctextreader is in PATH, otherwise use the local version
+CTEXT_EXE=$(command -v ${INSTALL_PREFIX}/libexec/${APP_NAME}/${APP_NAME}-engine 2>/dev/null || echo "./${APP_NAME}-engine")
+ASCII_IMAGE_EXE=$(command -v ascii-image-converter 2>/dev/null || echo "./ascii-image-converter")
+PY_SPLIT_EXE=$(command -v ${INSTALL_PREFIX}/libexec/${APP_NAME}/split_sentences.py 2>/dev/null || echo "./split_sentences.py")
 
 # Define the list of options
 
@@ -115,8 +112,8 @@ hide_cursor() {
 
 cleanup() {
     set +f
-    if [[ -f "$DATA_DIR"/out/output*.raw ]]; then
-        rm "$DATA_DIR"/out/output*.raw
+    if [[ -f $CONFIG_DIR/out/output*.raw ]]; then
+        rm $CONFIG_DIR/out/output*.raw
     fi
 
     if [[ -f "$OUT_TXT"/textfile ]]; then
@@ -510,7 +507,7 @@ config_voice() {
 
 
 setup_languages() {
-    skel_file="$DATA_DIR/skel/skel.env"
+    skel_file="$CONFIG_DIR/skel/skel.env"
     #local env_files=( $(ls "${CONFIG_DIR}"/*.env) )
     local languages=( $(ls "${MODELS_DIR}") )
 
@@ -548,7 +545,7 @@ read_selection() {
     fi
 
     set -f
-    echo $(wl-paste -p 2>/dev/null) | sed -e 's/)/\)/g' -e 's/(/\(/g' -e "s/'/\\'/g" -e 's/\"/\\\"/g' | "$CORE_BINARY" -l $language 2>/dev/null
+    echo $(wl-paste -p 2>/dev/null) | sed -e 's/)/\)/g' -e 's/(/\(/g' -e "s/'/\\'/g" -e 's/\"/\\\"/g' | "$CTEXT_EXE" -l $language 2>/dev/null
     set +f
     MESSAGE="⚠️ Thanks for reading!"
     cont=true
@@ -585,7 +582,7 @@ readfile() {
             return 1
         fi
 
-        "$CORE_BINARY" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
+        "$CTEXT_EXE" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
         MESSAGE="⚠️ Thanks for reading!"
 
         cont=true
@@ -607,7 +604,7 @@ readfile() {
             return 1
         fi
 
-        "$CORE_BINARY" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
+        "$CTEXT_EXE" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
 
         MESSAGE="⚠️ Thanks for reading!"
 
@@ -630,7 +627,7 @@ readfile() {
             return 1
         fi
 
-        "$CORE_BINARY" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
+        "$CTEXT_EXE" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
         MESSAGE="⚠️ Thanks for reading!"
 
         cont=true
@@ -652,7 +649,7 @@ readfile() {
             return 1
         fi
 
-        "$CORE_BINARY" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
+        "$CTEXT_EXE" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
 
         MESSAGE="⚠️ Thanks for reading!"
 
@@ -676,7 +673,7 @@ readfile() {
         fi
 
         
-        "$CORE_BINARY" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
+        "$CTEXT_EXE" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
 
         MESSAGE="⚠️ Thanks for reading!"
 
@@ -685,7 +682,7 @@ readfile() {
         return 0
     fi
     
-    "$CORE_BINARY" -l $language "$txtfile" 2>/dev/null
+    "$CTEXT_EXE" -l $language "$txtfile" 2>/dev/null
     MESSAGE="⚠️ Thanks for reading!"
     
     cont=true
@@ -718,7 +715,7 @@ format_text_file() {
 
 
 show_help() {
-    local help_str+="$(cat "${DATA_DIR}/help.txt")"
+    local help_str+="$(cat "${CONFIG_DIR}/help.txt")"
 
     LANG="en_GB.UTF-8" && LC_ALL="en_GB.UTF-8" && \
     whiptail --title "MorceNOX Art Reader - Help Screen!" \
@@ -934,7 +931,7 @@ clear
 "$ASCII_IMAGE_EXE" "${CONFIG_DIR}/image.png" -f -b --threshold 96 -C --color-bg 2>/dev/null
 echo "$APP_SLOGAN Thanks for reading with us!"
 echo
-echo "    MorceNOX CAT-Reader (C-Art Text Reader)™ Copyright © 2026  Amilcar Antonio Mesquita Rizk"
+echo "    MorceNOX Art-Reader™ Copyright © 2026  Amilcar Antonio Mesquita Rizk"
 echo "    This program comes with ABSOLUTELY NO WARRANTY; for details go to the 'help' option."
 echo "    This is free software, and you are welcome to redistribute it"
 echo "    under certain conditions; see <https://www.gnu.org/licenses/> for details."

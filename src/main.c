@@ -1,5 +1,5 @@
 /*
-* MorceNOX CAT-Reader (C-Art Text Reader)™
+* MorceNOX Art-Reader™
 *
 * Copyright (C) 2026 Amilcar Antonio Mesquita Rizk <amilcar.rizk@gmail.com>
 *
@@ -17,6 +17,7 @@
 * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -401,26 +402,16 @@ int filter_dots(const struct dirent *entry) {
 
 
 
-
-
-
 int main(int argc, char *argv[]) {
     tty_fd = open("/dev/tty", O_RDONLY);
     if (tty_fd < 0) tty_fd = STDIN_FILENO;
     
     const char *home_dir = getenv("HOME");
     char config_path[512];
+    snprintf(config_path, 512, "%s/%s/%s", home_dir, ".config", APPLICATION_NAME);
+    snprintf(audio_temp_dir, sizeof(audio_temp_dir), "%s/%s", config_path, "out");
 
-    setup_config_dir(APPLICATION_NAME, &config_path);
-
-    const char *data_dir = getenv("DATADIR");
-    if (data_dir == NULL) {
-#ifdef DATADIR
-        data_dir = DATADIR;
-#endif
-    }
-
-    snprintf(audio_temp_dir, sizeof(audio_temp_dir), "%s/%s", data_dir, "out");
+    //snprintf(audio_temp_dir, sizeof(audio_temp_dir), "%s/%s/%s", home_dir, program_invocation_short_name, "out");
 
     atexit(cleanup_resources);
     signal(SIGINT, handle_signal);  // Ctrl+C
@@ -431,7 +422,8 @@ int main(int argc, char *argv[]) {
     system("clear");
     enable_raw_mode(tty_fd, &orig_termios);
 
-    fprintf(stderr, "Program name is %s\n", program_invocation_short_name);
+    //fprintf(stderr, "Program name is %s\n", program_invocation_short_name);
+    printf("Program name is %s\n", APPLICATION_NAME);
 
     // Parse command line arguments
     float speed = NAN;
@@ -497,7 +489,9 @@ int main(int argc, char *argv[]) {
                     input_file = fopen(argv[i], "r");
                     if (input_file != NULL) {
                         read_from_file = 1;
-                        fprintf(stderr, "Reading from file: %s\n", argv[i]);
+
+                        printf("Reading from file: %s\n", argv[i]);
+
                         break;
                     } else {
                         fprintf(stderr, "Error: Could not open file %s\n", argv[i]);
@@ -551,11 +545,14 @@ int main(int argc, char *argv[]) {
     
     if (language != NULL) {
         fprintf(stderr, "Language: %s\n", language);
-        snprintf(env_path, sizeof(env_path), "%s/%s%s", config_dir, language, ".env");
+        //snprintf(env_path, sizeof(env_path), "%s/%s/%s%s", home_dir, program_invocation_short_name, language, ".env");
+        snprintf(env_path, sizeof(env_path), "%s/%s%s", config_path, language, ".env");
+
     } else {
         language = "en";
         fprintf(stderr, "Language = default language: %s\n", language);
-        snprintf(env_path, sizeof(env_path), "%s/%s%s", config_dir, "en", ".env");
+        //snprintf(env_path, sizeof(env_path), "%s/%s/%s%s", home_dir, program_invocation_short_name, "en", ".env");
+        snprintf(env_path, sizeof(env_path), "%s/%s%s", config_path, "en", ".env");
     }
            
     struct stat buffer;
@@ -574,7 +571,8 @@ int main(int argc, char *argv[]) {
     const int speaker = get_env_int("SPEAKER_ID", 0);
     
     char models_path[256];
-    snprintf(models_path, sizeof(models_path), "%s/%s/%s", home_dir, program_invocation_short_name, "models");
+    //snprintf(models_path, sizeof(models_path), "%s/%s/%s", home_dir, program_invocation_short_name, "models");
+    snprintf(models_path, sizeof(models_path), "%s/%s", config_path, "models");
 
     lang = strdup(language);
 
@@ -586,7 +584,7 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "List of available languages loaded\n");
 
         for (int i = 0; i < n_languages; i++) {
-            printf("%s\n", langlist[i]->d_name); 
+            fprintf(stderr, "%s\n", langlist[i]->d_name); 
             if (strcmp(langlist[i]->d_name, lang) == 0) {
                 lang_index = i;
             }
@@ -685,7 +683,9 @@ int main(int argc, char *argv[]) {
     if (text == NULL && read_from_file == 0) {
         read_from_file = 1;
         input_file = stdin;
-        fprintf(stderr, "Reading from stdin\n");
+        
+        printf("Reading from stdin\n");
+        
     }
     
 
@@ -832,7 +832,8 @@ int main(int argc, char *argv[]) {
                 }
                 snprintf(lang, sizeof(lang), "%s", langlist[lang_index]->d_name);
                 char env_path2[256];
-                snprintf(env_path2, sizeof(env_path2), "%s/%s%s", config_dir, lang, ".env");
+                //snprintf(env_path2, sizeof(env_path2), "%s/%s/%s%s", home_dir, program_invocation_short_name, lang, ".env");
+                snprintf(env_path2, sizeof(env_path2), "%s/%s%s", config_path, lang, ".env");
                 
                 load_env_file(env_path2);
 

@@ -1,5 +1,5 @@
 /*
-* MorceNOX CAT-Reader (C-Art Text Reader)™
+* MorceNOX Art-Reader™
 *
 * Copyright (C) 2026 Amilcar Antonio Mesquita Rizk <amilcar.rizk@gmail.com>
 *
@@ -375,7 +375,7 @@ void print_split_word(const char* str, int max_width) {
         size_t len = wcslen(wstr);
         size_t mid = len / 2;
 
-        if (mid * 4 + SCREEN_PADDING + 5 < max_width) {
+        if (mid * 4 + SCREEN_PADDING + 5 < (size_t)max_width) {
 
             // Instead of manual malloc/strncpy, use the helper above
             // to split the wide string and convert it back to UTF-8

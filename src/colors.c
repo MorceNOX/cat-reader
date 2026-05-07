@@ -1,5 +1,5 @@
 /*
-* MorceNOX CAT-Reader (C-Art Text Reader)™
+* MorceNOX Art-Reader™
 *
 * Copyright (C) 2026 Amilcar Antonio Mesquita Rizk <amilcar.rizk@gmail.com>
 *
@@ -60,7 +60,7 @@ void change_bgcolor(char **bgcolor, int *bgColorCode, int *fgColorCode, int incr
 void set_color(char **fgcolor, int *fgColorCode, char **bgcolor, int *bgColorCode, int increment, int highlight, int style) {
     change_fgcolor(fgcolor, fgColorCode, increment, highlight, style);
 
-    int fg[8] = {0, 1, 2, 3, 4, 5, 6, 7};
+    //int fg[8] = {0, 1, 2, 3, 4, 5, 6, 7};
     int bg[8] = {7, 2, 1, 4, 3, 6, 5, 0};
 
     *bgColorCode = bg[*fgColorCode];

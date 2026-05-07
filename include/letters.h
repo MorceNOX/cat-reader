@@ -1,5 +1,5 @@
 /*
-* MorceNOX CAT-Reader (C-Art Text Reader)™
+* MorceNOX Art-Reader™
 *
 * Copyright (C) 2026 Amilcar Antonio Mesquita Rizk <amilcar.rizk@gmail.com>
 *
