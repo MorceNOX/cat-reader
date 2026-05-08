@@ -1,6 +1,6 @@
 # cat-reader
 
-<img width="720" height="720" alt="image" src="https://github.com/MorceNOX/cat-reader/blob/main/assets/image_.png" />
+<img width="720" height="720" alt="image" src="assets/image_.png" />
 
 Choose your e-book, article or select any text and the reader will speak it out loud, sentence by sentence, while you read it in big ASCII Art letters!
 
@@ -124,39 +124,39 @@ Here are some screenshots followed by brief explanations. You can hit the **Help
 
 ### 1. The Main Menu
 
-![00-initial_menu_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/00-initial_menu_screenshot.png)
+![00-initial_menu_screenshot.png](assets/00-initial_menu_screenshot.png)
 
 ### 2. The Reader Screen
 
-![01-the_reader_in_default_colors_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/01-the_reader_in_default_colors_screenshot.png)
+![01-the_reader_in_default_colors_screenshot.png](assets/01-the_reader_in_default_colors_screenshot.png)
 
-![02-the_reader_white_over_gray_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/02-the_reader_white_over_gray_screenshot.png)
+![02-the_reader_white_over_gray_screenshot.png](assets/02-the_reader_white_over_gray_screenshot.png)
 
-![03-the_reader_yellow_over_blue_screenshot](https://github.com/MorceNOX/cat-reader/blob/main/assets/03-the_reader_yellow_over_blue_screenshot.png)
+![03-the_reader_yellow_over_blue_screenshot](assets/03-the_reader_yellow_over_blue_screenshot.png)
 
 ### 3. The File Selector
 
-![04-the_file_selector_screenshot](https://github.com/MorceNOX/cat-reader/blob/main/assets/04-the_file_selector_screenshot.png)
+![04-the_file_selector_screenshot](assets/04-the_file_selector_screenshot.png)
 
 ### 4. The Language Selector
 
-![05-the_language_selector_screenshot](https://github.com/MorceNOX/cat-reader/blob/main/assets/05-the_language_selector_screenshot.png)
+![05-the_language_selector_screenshot](assets/05-the_language_selector_screenshot.png)
 
 ### 5. The Voice Selector
 
-![06-the_voice_selector_screenshot](https://github.com/MorceNOX/cat-reader/blob/main/assets/06-the_voice_selector_screenshot.png)
+![06-the_voice_selector_screenshot](assets/06-the_voice_selector_screenshot.png)
 
 ### 6. The Help Screen
 
-![07-the_help_screen_1_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/07-the_help_screen_1_screenshot.png)
+![07-the_help_screen_1_screenshot.png](assets/07-the_help_screen_1_screenshot.png)
 
-![08-the_help_screen_2_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/08-the_help_screen_2_screenshot.png)
+![08-the_help_screen_2_screenshot.png](assets/08-the_help_screen_2_screenshot.png)
 
-![09-the_help_screen_3_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/09-the_help_screen_3_screenshot.png)
+![09-the_help_screen_3_screenshot.png](assets/09-the_help_screen_3_screenshot.png)
 
-![10-the_help_screen_4_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/10-the_help_screen_4_screenshot.png)
+![10-the_help_screen_4_screenshot.png](assets/10-the_help_screen_4_screenshot.png)
 
-![11-the_help_screen_5_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/11-the_help_screen_5_screenshot.png)
+![11-the_help_screen_5_screenshot.png](assets/11-the_help_screen_5_screenshot.png)
 
 ---
 
