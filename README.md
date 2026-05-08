@@ -38,7 +38,7 @@ When in the immersive Reader mode, these shortcuts allow you to navigate, contro
 |        Key        | Action         | Description                                       |
 | :---------------: | :------------- | :------------------------------------------------ |
 |   **Space / P**   | Play / Pause   | Toggles the audio playback.                       |
-|    **Q / ESC**    | Quit           | Immediately exits the application.                |
+|    **Q / ESC**    | Quit           | Immediately exits the Reader.                     |
 |       **]**       | Increase Speed | Makes the voice speak faster.                     |
 |       **[**       | Decrease Speed | Makes the voice speak slower.                     |
 |       **{**       | Half Speed     | Sets the playback speed to half.                  |
