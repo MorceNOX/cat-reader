@@ -1,6 +1,6 @@
 CC = gcc
 LDFLAGS = -Llib/libpiper -Llib/libpiper/lib64 -Wl,-rpath,'$(LIBEXECDIR)/libpiper:$(LIBEXECDIR)/libpiper/lib64'
-CFLAGS = -O3 -std=gnu99 -Wextra
+CFLAGS = -O3 -std=gnu11 -Wextra
 LIBS    = -ljson-c -lpiper -lonnxruntime
 SRCDIR = src
 INCDIR = include
@@ -74,8 +74,11 @@ install-user: $(TARGET)
 #	Copy the models from your project's models dir to the user's DATADIR
 	cp -r assets/models/* $(DATADIR)/models/
 
-#	Copy the image.png from your project's assets dir to the user's DATADIR
+#	Copy the image.png file from your project's assets dir to the user's DATADIR
 	cp -r assets/image.png $(DATADIR)/
+
+#	Copy the help.txt file from your project's assets dir to the user's DATADIR
+	cp -r assets/help.txt $(DATADIR)/
 
 #	Copy default configs from your project's config dir to the user's DATADIR
 	if [ -d config ]; then cp -r config/* $(DATADIR)/ 2>/dev/null || true; fi

@@ -553,7 +553,13 @@ read_selection() {
 }
 
 readfile() {
-    txtfile=$(file_select "." "text" "application/epub" "application/pdf" "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+    txtfile=$(file_select "." \
+                          "text" \
+                          "application/epub" \
+                          "application/pdf" \
+                          "application/vnd.openxmlformats-officedocument.wordprocessingml.document" \
+                          "application/vnd.oasis.opendocument.text" \
+                          "text/html")
     
     if [[ -z "$txtfile" ]]; then
         MESSAGE="⚠️ No file selected!"
@@ -593,6 +599,52 @@ readfile() {
         pandoc -f markdown -t plain --wrap=none --toc=false "$txtfile" -o "$OUT_TXT"/textfile
         if [ $? -ne 0 ]; then
             MESSAGE="⚠️ Error converting markdown to text!"
+            cont=true
+            return 1
+        fi
+
+        "$PY_SPLIT_EXE" "$OUT_TXT"/textfile -o "$OUT_TXT"/textfile_sentences.txt
+        if [ $? -ne 0 ]; then
+            MESSAGE="⚠️ Error splitting sentences!"
+            cont=true
+            return 1
+        fi
+
+        "$CTEXT_EXE" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
+
+        MESSAGE="⚠️ Thanks for reading!"
+
+        cont=true
+        sleep 2
+        return 0
+
+    elif [[ "$content_type" == *html* ]]; then
+        pandoc -f html -t plain --wrap=none --toc=false "$txtfile" -o "$OUT_TXT"/textfile
+        if [ $? -ne 0 ]; then
+            MESSAGE="⚠️ Error converting html to text!"
+            cont=true
+            return 1
+        fi
+
+        "$PY_SPLIT_EXE" "$OUT_TXT"/textfile -o "$OUT_TXT"/textfile_sentences.txt
+        if [ $? -ne 0 ]; then
+            MESSAGE="⚠️ Error splitting sentences!"
+            cont=true
+            return 1
+        fi
+
+        "$CTEXT_EXE" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
+
+        MESSAGE="⚠️ Thanks for reading!"
+
+        cont=true
+        sleep 2
+        return 0
+
+    elif [[ "$content_type" == *vnd.oasis.opendocument.text* ]]; then
+        pandoc -f odt -t plain --wrap=none --toc=false "$txtfile" -o "$OUT_TXT"/textfile
+        if [ $? -ne 0 ]; then
+            MESSAGE="⚠️ Error converting odt to text!"
             cont=true
             return 1
         fi
