@@ -203,7 +203,7 @@ Here are some screenshots followed by brief explanations. You can hit the **Help
 ### 4. The Language Selector
 ![05-the_language_selector_screenshot](https://github.com/MorceNOX/cat-reader/blob/main/assets/05-the_language_selector_screenshot.png)
 
-### 5. The Language Selector
+### 5. The Voice Selector
 ![06-the_voice_selector_screenshot](https://github.com/MorceNOX/cat-reader/blob/main/assets/06-the_voice_selector_screenshot.png)
 
 ### 6. The Help Screen
