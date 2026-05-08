@@ -136,6 +136,8 @@ sudo apt install libjson-c-dev
 ```
 sudo dnf install json-c-devel
 ```
+
+ Some of these required packages may require another set of packages, but the respective installation command will manage these additions properly.
  
 ### Optional Requirement
 - ascii-image-converter
