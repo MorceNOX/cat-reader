@@ -188,10 +188,10 @@ Now you can intuitivelly navigate through the main menu, choose your language, c
 Here are some screenshots followed by brief explanations. You can hit the **Help** option at any time in the **main menu** to get help.
 
 ### 1. The Main Menu
-[00-initial_menu_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/00-initial_menu_screenshot.png)
+![00-initial_menu_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/00-initial_menu_screenshot.png)
 
 ### 2. The Reader Screen
-<img width="1920" height="1154" alt="01-the_reader_in_default_colors_screenshot" src="https://github.com/cat-reader/blob/main/assets/01-initial_menu_screenshot.png" />
+![01-the_reader_in_default_colors_screenshot](https://github.com/cat-reader/blob/main/assets/01-initial_menu_screenshot.png)
 
 <img width="1920" height="1154" alt="02-the_reader_white_over_gray_screenshot" src="https://github.com/cat-reader/blob/main/assets/02-the_reader_white_over_gray_screenshot.png" />
 
