@@ -191,7 +191,7 @@ Here are some screenshots followed by brief explanations. You can hit the **Help
 ![00-initial_menu_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/00-initial_menu_screenshot.png)
 
 ### 2. The Reader Screen
-![01-the_reader_in_default_colors_screenshot.png](https://github.com/cat-reader/blob/main/assets/01-the_reader_in_default_colors_screenshot.png)
+![01-the_reader_in_default_colors_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/01-the_reader_in_default_colors_screenshot.png)
 
 ![02-the_reader_white_over_gray_screenshot](https://github.com/cat-reader/blob/main/assets/02-the_reader_white_over_gray_screenshot.png)
 
