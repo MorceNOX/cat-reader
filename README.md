@@ -9,15 +9,15 @@
 
 ## Why `cat-reader`?
 
- `cat-reader` stands for C Art Text Reader, because it is written in `C Language` and provides a way to read your *Text* in an *Artistic* way, and because the text is displayed in `ASCII Art` big letters (lots of unicode )! In the image above we can see our little black cat also listening to something, which is the sound of the letters contained in the book, since our reader also "reads for you" the text out loud in the language you select!
+ `cat-reader` stands for C Art Text Reader, because it is written in `C Language` and provides a way to read your *Text* in an *Artistic* way, and because the text is displayed in `ASCII Art` big letters! In the image above we can see our little black cat also listening to something, which is the sound of the letters contained in the book, since our reader also "reads for you" the text out loud in the language you select!
 
- For this `text-to-speech` feature our application uses the `Piper` engine in the background. You don't need to install `piper` or any of its libraries, because they are already embedded in the instalation.
+ For this `text-to-speech` feature our application uses the `Piper` engine in the background (the new version GPL1). You don't need to install `piper` or any of its libraries, because they are already embedded in the code and in installed files.
 
 ## What does this application do?
 
  `cat-reader` is a text only reader. It reads an speaks any text you choose, be it a book, an article, or a selected piece of text in your browser or in any other application you may be using. 
 
- So, you choose a text in your screen by selecting it; or choose **a text file**; or **a document** in `epub`, `markdown`, `docx`, `odt`, `rtf` and `html` formats, or in **any other text format**; or **any `pdf` file which contais text** and `cat-reader` will separate the provided text into sentences,read them in the right order, one by one, and **displaying them sequentially in big letters**, in ASCII Art format and, at the same time, **the same displayed sentence is spoken out loud** in the language you have previously selected in the initial menu.
+ So, you choose a text in your screen by selecting it; or choose **a text file**; or **a document** in `epub`, `markdown`, `docx`, `odt`, `rtf` and `html` formats, including **any other text format**; or **any `pdf` file which contains text** and `cat-reader` will make the necessary conversions, separate the provided text into sentences, read these sentences in the right order, one by one, and **displaying them sequentially in big letters**, in ASCII Art format and, at the same time, **the same displayed sentence is spoken out loud** in the language you have previously selected in the initial menu.
 
  While the reader displays and speaks a sentence, **a big bar**, also displayed in ASCII Art letters, shows you the selected language, the speed of the reading, the volume of the audio and the ordinal number of the current sentence, together with the total number of sentences which the whole text contains.
 
