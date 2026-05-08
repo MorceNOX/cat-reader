@@ -7,6 +7,15 @@
  
  This is, by far, the most comfortable way to read a book and to be engaged in your favourite readings!
 
+ `cat-reader` stands for C Art Text Reader, because is written in `C Language` and provides a way to read your `Text` in an `Artistic` way, and because the text is displayed in `ASCII Art` big letters! In the image above we can see our little black cat also listening to something, which is the sound of the letters contained in the book, since our reader also "reads for you" the text out loud in the language you select!
+
+ For this `text-to-speech` feature our application uses the `Piper` engine in the background. You don't need to install `piper` or any of its libraries, because they are already embedded in the instalation.
+
+## Why we show the texts in ASCII Art letters?
+
+ Well, because it is "cool", it is "nice" and because it runs perfectly in any terminal showing any text in big beautiful letters.
+ 
+
 ## Requirements
  
 - gcc
