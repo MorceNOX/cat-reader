@@ -18,10 +18,15 @@
 - newt
 
  You need a `gcc compiler`, `make` and `bash` to run the `Makefile` and generate the executable when you are building from source, which is the preferable method. It is simple and it guarantees that everything will work without issues on your personal machine and environment.
+ 
  `Bash` is also required to run the initial menu and configuration options.
+ 
  `Pandoc` is required for reading `.markdown` files, `.epub` files, `.docx` files and `.rtf` files.
+ 
  `Poppler-utils` is required for converting `.pdf` files into text, so you can read your .pdf files which contains text as if they were a simple plain text file.
+ 
  `jq` and `newt` is normally already installed on most ditros, but if not, you have to install these packages do make the application able to read configuration files and to display the menus properly.
+ 
 ### Optional
 - ascii-image-converter
  Just choose the version that fits your machine, extract the files and copy the binary to `/usr/local/bin`.
