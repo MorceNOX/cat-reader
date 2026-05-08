@@ -17,21 +17,23 @@
 
  `cat-reader` is a text only reader. It reads an speaks any text you choose, be it a book, an article, or a selected piece of text in your browser or in any other application you may be using. 
 
- So, you choose a text in your screen by selecting it; or choose a text file; or a document in `epub`, `markdown`, `docx`, `rtf` and `html` formats, or in any other text format; or any `pdf` file which contais text and `cat-reader` will separate the provide text into sentences. Each created sentence will be read in the right order, one by one, beig displayed sequentially in big letters, in ASCII Art format and, at the same time, the same displayed sentence is spoken out loud in the language you have previously selected in the initial menu.
+ So, you choose a text in your screen by selecting it; or choose **a text file**; or **a document** in `epub`, `markdown`, `docx`, `odt`, `rtf` and `html` formats, or in **any other text format**; or **any `pdf` file which contais text** and `cat-reader` will separate the provided text into sentences,read them in the right order, one by one, and **displaying them sequentially in big letters**, in ASCII Art format and, at the same time, **the same displayed sentence is spoken out loud** in the language you have previously selected in the initial menu.
 
- While the reader displays and speaks a sentence, a big bar, also displayed in ASCII Art letters, shows you the selected language, the speed of the reading, the volume of the audio and the ordinal number of the current sentence, together with the total number of sentences which the text contains.
+ While the reader displays and speaks a sentence, **a big bar**, also displayed in ASCII Art letters, shows you the selected language, the speed of the reading, the volume of the audio and the ordinal number of the current sentence, together with the total number of sentences which the whole text contains.
 
- Simple controls, as the arrow keys, space bar, etc., allow you to navigate along the text, forward and backwards, sentence by sentence or in blocks. So you can "walk" and "jump" through the entire text as you press one key.
+ Simple controls, as the arrow keys, space bar, etc., allow you **to navigate along the text**, forward and backwards, **sentence by sentence** or **in blocks**. So you can "walk" and "jump" through the entire text as you press one key.
 
  As you change the sentence by pressing a key, the current audio immediatelly stops an the next sentence is read, out loud, and dispplayed in big letters.
 
  You can also control the speed and the volume of the audio, as well, the colors which the ASCII Art text is displayed.
 
+ The Escape key <ESC> or "Q" exit the reader and goes back to the main menu. Another <ESC> or "Q" exits the application. 
+
  Everything occurs quickly and easily, without consumming too much of your machine resources. For that the application is written in `C Language`.
 
 ## Why we show the texts in ASCII Art letters?
 
- Well, because it is "cool", it is "nice" and because it runs perfectly in any terminal showing any text in big beautiful letters, without requiring any graphic tool or library. It is all just in your terminal. You can easily even control the zoom in and out using your terminal shortcuts (*generally `Ctrl +` or `Ctrl Shift +` to zoom in and `Ctrl -` to zoom out*).
+ Well, because it is "cool", it is "nice" and because it runs perfectly in any terminal, allowing to show any text in big beautiful letters, without requiring any external graphic tool or library. It is all just in your terminal! You can easily even control the zoom in and out using your terminal shortcuts (*generally `Ctrl +` or `Ctrl Shift +` to zoom in and `Ctrl -` to zoom out*).
  
 ## Requirements
  
