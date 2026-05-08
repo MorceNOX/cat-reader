@@ -191,20 +191,20 @@ Here are some screenshots followed by brief explanations. You can hit the **Help
 ![00-initial_menu_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/00-initial_menu_screenshot.png)
 
 ### 2. The Reader Screen
-![01-the_reader_in_default_colors_screenshot](https://github.com/cat-reader/blob/main/assets/01-initial_menu_screenshot.png)
+![01-the_reader_in_default_colors_screenshot.png](https://github.com/cat-reader/blob/main/assets/01-the_reader_in_default_colors_screenshot.png)
 
-<img width="1920" height="1154" alt="02-the_reader_white_over_gray_screenshot" src="https://github.com/cat-reader/blob/main/assets/02-the_reader_white_over_gray_screenshot.png" />
+![02-the_reader_white_over_gray_screenshot](https://github.com/cat-reader/blob/main/assets/02-the_reader_white_over_gray_screenshot.png)
 
-<img width="1920" height="1154" alt="03-the_reader_yellow_over_blue_screenshot" src="https://github.com/cat-reader/blob/main/assets/03-the_reader_yellow_over_blue_screenshot.png" />
+![03-the_reader_yellow_over_blue_screenshot](https://github.com/cat-reader/blob/main/assets/03-the_reader_yellow_over_blue_screenshot.png)
 
 ### 3. The File Selector
-<img width="1920" height="1154" alt="04-the_file_selector_screenshot" src="https://github.com/cat-reader/blob/main/assets/04-the_file_selector_screenshot.png" />
+![04-the_file_selector_screenshot](https://github.com/cat-reader/blob/main/assets/04-the_file_selector_screenshot.png)
 
 ### 4. The Language Selector
-<img width="1920" height="1154" alt="05-the_language_selector_screenshot" src="https://github.com/cat-reader/blob/main/assets/05-the_language_selector_screenshot.png" />
+![05-the_language_selector_screenshot](https://github.com/cat-reader/blob/main/assets/05-the_language_selector_screenshot.png)
 
 ### 5. The Language Selector
-<img width="1920" height="1154" alt="06-the_voice_selector_screenshot" src="https://github.com/cat-reader/blob/main/assets/06-the_voice_selector_screenshot.png" />
+![06-the_voice_selector_screenshot](https://github.com/cat-reader/blob/main/assets/06-the_voice_selector_screenshot.png)
 
 
 
