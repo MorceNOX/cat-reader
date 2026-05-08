@@ -10,7 +10,7 @@ This is, by far, the most comfortable way to read a book and to be engaged in yo
 
 ## 🚀 Key Features
 
-`cat-reader` stands for C Art Text Reader. It combines the power of C programming with modern text-to-speech technology to give you an artistic reading experience directly in your terminal.
+`cat-reader` is an acronym for **C Art Text Reader**. It combines the power of C programming with modern text-to-speech technology to give you an artistic reading experience directly in your terminal.
 
 *   **Versatile Input:** Reads almost anything! Supports plain text, and complex formats like `epub`, `markdown`, `docx`, `odt`, `rtf`, `html`, and even text extracted from `pdf` files.
 *   **Simultaneous Reading & Listening:** As the text scrolls in big ASCII Art, the sentence is spoken aloud in your chosen language via the integrated Piper TTS engine.
@@ -60,9 +60,9 @@ When in the immersive Reader mode, these shortcuts allow you to navigate, contro
 
 ## 🤔 Why `cat-reader`?
 
-`cat-reader` stands for C Art Text Reader. It is written in C Language and provides a way to read your *Text* in an *Artistic* way, displaying it in `ASCII Art` big letters! In the image above we can see our little black cat also listening to something, which is the sound of the letters contained in the book, since our reader also "reads for you" the text out loud in the language you select!
+`cat-reader` stands, as it has told above, for **C Art Text Reader**. It is written in C Language and provides a way to read your *Text* in an *Artistic* way, displaying it in `ASCII Art` big letters! In the image above we can see our little black cat also listening to something, which is the sound of the letters contained in the book, since our reader also "reads for you" the text out loud in the language you select!
 
-For this `text-to-speech` feature, our application uses the `Piper` engine in the background (the new version GPL1). You don't need to install `piper` or any of its libraries, because they are already embedded in the code and in installed files.
+For this `text-to-speech` feature, our application uses the `Piper` engine in the background (the new version GPL1) and `SDL2` to play the audio streaming. You don't need to install `piper` or any of its libraries, because they are already embedded in the code and in installed files.
 
 ## 🛠️ Requirements & Installation
 
@@ -76,19 +76,19 @@ To compile and run `cat-reader`, you need the following system packages:
 *   `pandoc` (For `.markdown`, `.epub`, `.docx`, `.rtf`, `.odt`, `.html`)
 *   `poppler-utils` (For text extraction from `.pdf`)
 *   `jq` and `newt` (For configuration and selecting options)
-*   `alsa-utils` (For the audio playback)
 *   `json-c` (The external C library for configuration parsing)
+*   `SDL2` (External C library for accessing the audio devices. It is needed to play the generated audio streams)
 
 **In Debian or Ubuntu:**
 
 ```bash
-sudo apt install build-essential bash pandoc poppler-utils jq newt alsa-utils libjson-c-dev
+sudo apt install build-essential bash pandoc poppler-utils jq newt libjson-c-dev libsdl2-dev
 ```
 
 **In Fedora or CentOS:**
 
 ```bash
-sudo dnf install gcc make bash pandoc poppler-utils jq newt alsa-utils json-c-devel
+sudo dnf install gcc make bash pandoc poppler-utils jq newt json-c-devel sdl2-compat-devel
 ```
 
 ### Installation Steps
@@ -124,9 +124,13 @@ Here are some screenshots followed by brief explanations. You can hit the **Help
 
 ### 1. The Main Menu
 
+This is the main menu containing the options to play (read) a file or a selected piece of text, select the language, the voice and the application settings.
+
 ![00-initial_menu_screenshot.png](assets/00-initial_menu_screenshot.png)
 
 ### 2. The Reader Screen
+
+This is **The Reader**, Your terminal dimensions will determine the size and the amount of the text displayed in the screen. The punctuation determines the limits of a sentence.
 
 ![01-the_reader_in_default_colors_screenshot.png](assets/01-the_reader_in_default_colors_screenshot.png)
 

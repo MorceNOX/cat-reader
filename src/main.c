@@ -58,8 +58,7 @@ typedef struct {
 struct termios orig_termios;
 int tty_fd = STDIN_FILENO;
 pid_t current_audio_pgid = 0;
-bool paused = false; // New global state for pausing
-char audio_temp_dir[255];
+bool paused = false;
 char *fgcolor = NULL;
 char *bgcolor = NULL;
 char *text = NULL;
@@ -150,16 +149,8 @@ void free_resources() {
 }
 
 void cleanup_resources() {    
-    stop_current_audio();
-    
-    if (clean_directory(audio_temp_dir)) {
-        fprintf(stderr, "Temporary audio files successfuly deleted!");
-    }
-    //free_resources();
-    
+    stop_current_audio();    
 }
-
-
 
 void handle_signal(int sig) {
     free_resources(); 
@@ -408,9 +399,6 @@ int main(int argc, char *argv[]) {
     const char *home_dir = getenv("HOME");
     char config_path[512];
     snprintf(config_path, 512, "%s/%s/%s", home_dir, ".config", APPLICATION_NAME);
-    snprintf(audio_temp_dir, sizeof(audio_temp_dir), "%s/%s", config_path, "out");
-
-    //snprintf(audio_temp_dir, sizeof(audio_temp_dir), "%s/%s/%s", home_dir, program_invocation_short_name, "out");
 
     atexit(cleanup_resources);
     signal(SIGINT, handle_signal);  // Ctrl+C
@@ -421,8 +409,7 @@ int main(int argc, char *argv[]) {
     system("clear");
     enable_raw_mode(tty_fd, &orig_termios);
 
-    //fprintf(stderr, "Program name is %s\n", program_invocation_short_name);
-    printf("Program name is %s\n", APPLICATION_NAME);
+    fprintf(stderr, "Program name is %s\n", APPLICATION_NAME);
 
     // Parse command line arguments
     float speed = NAN;
@@ -489,7 +476,7 @@ int main(int argc, char *argv[]) {
                     if (input_file != NULL) {
                         read_from_file = 1;
 
-                        printf("Reading from file: %s\n", argv[i]);
+                        fprintf(stderr, "Reading from file: %s\n", argv[i]);
 
                         break;
                     } else {
@@ -544,13 +531,11 @@ int main(int argc, char *argv[]) {
     
     if (language != NULL) {
         fprintf(stderr, "Language: %s\n", language);
-        //snprintf(env_path, sizeof(env_path), "%s/%s/%s%s", home_dir, program_invocation_short_name, language, ".env");
         snprintf(env_path, sizeof(env_path), "%s/%s%s", config_path, language, ".env");
 
     } else {
         language = "en";
         fprintf(stderr, "Language = default language: %s\n", language);
-        //snprintf(env_path, sizeof(env_path), "%s/%s/%s%s", home_dir, program_invocation_short_name, "en", ".env");
         snprintf(env_path, sizeof(env_path), "%s/%s%s", config_path, "en", ".env");
     }
            
@@ -570,7 +555,6 @@ int main(int argc, char *argv[]) {
     const int speaker = get_env_int("SPEAKER_ID", 0);
     
     char models_path[256];
-    //snprintf(models_path, sizeof(models_path), "%s/%s/%s", home_dir, program_invocation_short_name, "models");
     snprintf(models_path, sizeof(models_path), "%s/%s", config_path, "models");
 
     lang = strdup(language);
@@ -589,7 +573,6 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-
 
     // Check if files exist    
     if (stat(model_path, &buffer) != 0) {
@@ -686,8 +669,6 @@ int main(int argc, char *argv[]) {
         printf("Reading from stdin\n");
         
     }
-    
-
 
     // 1. Unified Loading
     if (read_from_file) {
@@ -855,8 +836,7 @@ int main(int argc, char *argv[]) {
                 // Line finished naturally
                 current_idx++;
             }
-        }
-        
+        }        
     }
     free(lang);
 

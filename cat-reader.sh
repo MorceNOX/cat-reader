@@ -126,10 +126,10 @@ hide_cursor() {
 
 
 cleanup() {
-    set +f
-    if [[ -f $CONFIG_DIR/out/output*.raw ]]; then
-        rm $CONFIG_DIR/out/output*.raw
-    fi
+    # set +f
+    # if [[ -f $CONFIG_DIR/out/output*.raw ]]; then
+    #     rm $CONFIG_DIR/out/output*.raw
+    # fi
 
     if [[ -f "$OUT_TXT"/textfile ]]; then
         rm "$OUT_TXT"/textfile

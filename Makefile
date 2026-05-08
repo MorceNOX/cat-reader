@@ -1,7 +1,7 @@
 CC = gcc
 LDFLAGS = -Llib/libpiper -Llib/libpiper/lib64 -Wl,-rpath,'$(LIBEXECDIR)/libpiper:$(LIBEXECDIR)/libpiper/lib64'
 CFLAGS = -O3 -std=gnu11 -Wextra
-LIBS    = -ljson-c -lpiper -lonnxruntime
+LIBS    = -ljson-c -lpiper -lonnxruntime -lSDL2 -lpthread
 SRCDIR = src
 INCDIR = include
 SOURCES = $(wildcard $(SRCDIR)/*.c)
@@ -19,7 +19,7 @@ LIBEXECDIR ?= $(PREFIX)/libexec/$(APP_NAME)
 DATADIR = $(HOME)/.config/$(APP_NAME)
 
 # Release/Packaging Variables
-VERSION = 1.0.0
+VERSION = 1.1.0
 PACKAGE_NAME = $(APP_NAME)-$(VERSION)
 DIST_DIR = release/$(PACKAGE_NAME)
 
@@ -70,7 +70,6 @@ install: $(TARGET)
 # User-space installation (for $HOME/.config/cat-reader)
 install-user: $(TARGET)
 	mkdir -p $(DATADIR)/models
-	mkdir -p $(DATADIR)/out
 	mkdir -p $(DATADIR)/out_txt
 	
 #	Copy espeak-ng-data from your project's lib dir to the user's DATADIR

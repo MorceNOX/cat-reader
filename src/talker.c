@@ -27,13 +27,13 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <pthread.h>
+#include <SDL2/SDL.h>
 #include "talker.h"
 #include "json_helper.h"
 #include "environment.h"
-#include "app.h"
 
 // Global mutex for file operations
-static pthread_mutex_t file_mutex = PTHREAD_MUTEX_INITIALIZER;
+//static pthread_mutex_t file_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 int extract_sample_rate(const char* json_path, int default_value) {
     const char* path_parts[] = {"audio", "sample_rate"};
@@ -113,7 +113,7 @@ int talker(
     char* text,
     float volume
 ) {
-    // Create synthesizer
+    // 1. Initialize Synthesizer and extract metadata
     piper_synthesizer *synth = piper_create(model_path, json_path, espeak_path);
     if (!synth) {
         fprintf(stderr, "Error: Failed to create synthesizer\n");
@@ -132,75 +132,66 @@ int talker(
         fprintf(stderr, "Warning: Could not extract sample rate, using default 22050\n");
         sample_rate = 22050;
     }
-
-    const char *data_dir = getenv("DATADIR");
-    if (data_dir == NULL) {
-#ifdef DATADIR
-        data_dir = DATADIR;
-#else
-        const char *home_dir = getenv("HOME");
-        const char config_path[512];
-        snprintf(config_path, 512, "%s/%s/%s", home_dir, ".config", APPLICATION_NAME);
-
-        data_dir = config_path;
-#endif
-    }
-
-    // Create unique output file path to avoid conflicts
-    char output_path[512];
-    pid_t pid = getpid();
-    snprintf(output_path, sizeof(output_path), "%s/%s/output_%d.raw", data_dir, "out", pid);
-
-    // Open output file with mutex protection
-    pthread_mutex_lock(&file_mutex);
-    FILE *audio_stream = fopen(output_path, "wb");
-    pthread_mutex_unlock(&file_mutex);
-    
-    if (audio_stream == NULL) {
-        fprintf(stderr, "Failed to open output file\n");
-        piper_free(synth);
-        
-        return 1;
-    }
     
     float phoneme_length = length_scale / speed;
+
+    // 2. Initialize SDL2 Audio
+    if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+        fprintf(stderr, "SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+        piper_free(synth);
+        return 1;
+    }
+
+    SDL_AudioSpec want, have;
+    SDL_zero(want);
+    want.freq = sample_rate;
+    want.format = AUDIO_F32;
+    want.channels = 1;
+    want.samples = 4096;     // Buffer size
+
+    SDL_AudioDeviceID dev = SDL_OpenAudioDevice(NULL, 0, &want, &have, 0);
+    if (dev == 0) {
+        fprintf(stderr, "Failed to open audio device: %s\n", SDL_GetError());
+        SDL_Quit();
+        piper_free(synth);
+        return 1;
+    }
+
+    // IMPORTANT: Unpause the device to start playback
+    SDL_PauseAudioDevice(dev, 0);
     
-    // Set up synthesis options
+    // 3. Set up synthesis options
     piper_synthesize_options options = piper_default_synthesize_options(synth);
     // Change options here:
     options.length_scale = phoneme_length;
     options.speaker_id = speaker;
     
-    // Start synthesis
+    // 4. Start synthesis
     piper_synthesize_start(synth, text, &options);
     
-    // Process audio chunks
+    // 5. The streaming loop. Process audio chunks
     piper_audio_chunk chunk;
     while (piper_synthesize_next(synth, &chunk) != PIPER_DONE) {
-        // Scale the samples before writing
+        // Scale the samples before playing
         scale_audio_samples((float*)chunk.samples, chunk.num_samples, volume);
-        fwrite(chunk.samples, sizeof(float), chunk.num_samples, audio_stream);
-    }
-    
-    // Clean up
-    fclose(audio_stream);
-    piper_free(synth);
-            
-    // Play the audio file
-    fprintf(stderr, "Audio file generated at %s. Attempting to play...\n", output_path);
-    
-    // Try to play the audio with correct sample rate
-    if (play_audio(output_path, sample_rate)) {
-        fprintf(stderr, "Audio played successfully!\n");
-    } else {
-        fprintf(stderr, "Failed to play audio. You can play it manually with:\n");
-        fprintf(stderr, "aplay -r %d -f FLOAT_LE -t raw %s\n", sample_rate, output_path);
+
+        // Push the chunk directly to the SDL audio queue
+        // We multiply num_samples by sizeof(float) to get the total byte size
+        SDL_QueueAudio(dev, chunk.samples, chunk.num_samples * sizeof(float));
+    }    
+
+    // 6. Wait for the buffer to finish playing
+    // Since SDL_QueueAudio is asynchronous, the loop finishes as soon as 
+    // the last chunk is queued, NOT when it finishes playing.
+    // We must wait until the queue size reaches zero.
+    while (SDL_GetQueuedAudioSize(dev) > 0) {
+        SDL_Delay(10); // Small sleep to prevent 100% CPU usage while waiting
     }
 
-    // Clean up temporary file
-    pthread_mutex_lock(&file_mutex);
-    unlink(output_path);
-    pthread_mutex_unlock(&file_mutex);
+    // 7. Cleanup
+    SDL_CloseAudioDevice(dev);
+    SDL_Quit();
+    piper_free(synth);
 
     return 0;
 }
