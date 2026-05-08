@@ -118,7 +118,7 @@ sudo apt install libjson-c-dev
 
  In `Fedora` or `CentOS` you just type:
 ```
-sudo dnf install json-c-dev
+sudo dnf install json-c-devel
 ```
  
 ### Optional
