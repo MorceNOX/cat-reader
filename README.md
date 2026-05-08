@@ -207,7 +207,16 @@ Here are some screenshots followed by brief explanations. You can hit the **Help
 ![06-the_voice_selector_screenshot](https://github.com/MorceNOX/cat-reader/blob/main/assets/06-the_voice_selector_screenshot.png)
 
 ### 6. The Help Screen
-![]()
+![07-the_help_screen_1_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/07-the_help_screen_1_screenshot.png)
+
+![08-the_help_screen_2_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/08-the_help_screen_2_screenshot.png)
+
+![09-the_help_screen_3_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/09-the_help_screen_3_screenshot.png)
+
+![10-the_help_screen_4_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/10-the_help_screen_4_screenshot.png)
+
+![11-the_help_screen_5_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/11-the_help_screen_5_screenshot.png)
+
 
 
 
