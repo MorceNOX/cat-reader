@@ -19,7 +19,7 @@ LIBEXECDIR ?= $(PREFIX)/libexec/$(APP_NAME)
 DATADIR = $(HOME)/.config/$(APP_NAME)
 
 # Release/Packaging Variables
-VERSION = 1.1.0
+VERSION = 1.1.1
 PACKAGE_NAME = $(APP_NAME)-$(VERSION)
 DIST_DIR = release/$(PACKAGE_NAME)
 

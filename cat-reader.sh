@@ -34,6 +34,7 @@ INSTALL_PREFIX="/usr/local"
 # we point the LIBEXEC to the 'libexec' folder next to it.
 if [ -d "$SCRIPT_DIR/../libexec" ]; then
     LIBEXECDIR="$SCRIPT_DIR/../libexec"
+    
     # For the package, we also want to point to the local lib folder
     export LD_LIBRARY_PATH="$LIBEXECDIR/libpiper:$LIBEXECDIR/libpiper/lib64:$LD_LIBRARY_PATH"
 else
@@ -42,10 +43,17 @@ else
 fi
 
 
+
 # Detect if ctextreader is in PATH, otherwise use the local version
-CTEXT_EXE=$(command -v ${LIBEXECDIR}/${APP_NAME}-engine 2>/dev/null || echo "./${APP_NAME}-engine")
+
+if [[ $(command -v "${LIBEXECDIR}/${APP_NAME}-engine") ]]; then
+    CTEXT_EXE="${LIBEXECDIR}/${APP_NAME}-engine 2>/dev/null"
+    PY_SPLIT_EXE="${LIBEXECDIR}/split_sentences.py 2>/dev/null"
+else
+    CTEXT_EXE=$(command -v ${LIBEXECDIR}/${APP_NAME}/${APP_NAME}-engine 2>/dev/null || echo "./${APP_NAME}-engine")
+    PY_SPLIT_EXE=$(command -v ${LIBEXECDIR}/${APP_NAME}/split_sentences.py 2>/dev/null || echo "./split_sentences.py")
+fi
 ASCII_IMAGE_EXE=$(command -v ascii-image-converter 2>/dev/null || echo "./ascii-image-converter")
-PY_SPLIT_EXE=$(command -v ${LIBEXECDIR}/split_sentences.py 2>/dev/null || echo "./split_sentences.py")
 
 # Define the list of options
 

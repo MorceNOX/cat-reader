@@ -62,7 +62,7 @@ When in the immersive Reader mode, these shortcuts allow you to navigate, contro
 
 `cat-reader` stands, as it has told above, for **C Art Text Reader**. It is written in C Language and provides a way to read your *Text* in an *Artistic* way, displaying it in `ASCII Art` big letters! In the image above we can see our little black cat also listening to something, which is the sound of the letters contained in the book, since our reader also "reads for you" the text out loud in the language you select!
 
-For this `text-to-speech` feature, our application uses the `Piper` engine in the background (the new version GPL1) and `SDL2` to play the audio streaming. You don't need to install `piper` or any of its libraries, because they are already embedded in the code and in installed files.
+For this `text-to-speech` feature, our application uses the `Piper` engine in the background (the new version GPL) and `SDL2` to play the audio streaming. You don't need to install `piper` or any of its libraries, because they are already embedded in the code and in installed files.
 
 ## 🛠️ Requirements & Installation
 
@@ -125,6 +125,8 @@ Here are some screenshots followed by brief explanations. You can hit the **Help
 ### 1. The Main Menu
 
 This is the main menu containing the options to play (read) a file or a selected piece of text, select the language, the voice and the application settings.
+
+To add new voices to the Reader, you firstly download a voice file `.onnx` and its corresponding JSON configuration file `.onnx.json`. You can find lots of Piper voice files on the internet. The main files are available [here](https://huggingface.co/rhasspy/piper-voices/tree/main). Just download the files you want and hit the `Get a Voice Model` option in the main menu. A file dialog will appear and you must point to the downloaded `.onnx` file location, so the application will make the new voice ready to be used. 
 
 ![00-initial_menu_screenshot.png](assets/00-initial_menu_screenshot.png)
 
