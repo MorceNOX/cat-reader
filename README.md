@@ -29,6 +29,10 @@
  
 ### Optional
 - ascii-image-converter
+
  Just choose the version that fits your machine, extract the files and copy the binary to `/usr/local/bin`.
+ 
  Here is the link: [ascii-image-converter last release](https://github.com/TheZoraiz/ascii-image-converter/releases/tag/v1.13.1).
+ 
  This program is needed to show the image in *ASCII Art* format in the splash screen and when the application finnishes. It gives a little more *charm* to the reader, showing our little black cat reading a book, but if not installed, the Reader will still work normally.
+ 
