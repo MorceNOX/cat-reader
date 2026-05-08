@@ -144,13 +144,68 @@ sudo dnf install json-c-devel
 
  Just choose the version that fits your machine, extract the files and copy the binary to `/usr/local/bin`.
  
- Here is the link: [ascii-image-converter last release](https://github.com/TheZoraiz/ascii-image-converter/releases/tag/v1.13.1).
+ Here is the link to download it: [ascii-image-converter last release](https://github.com/TheZoraiz/ascii-image-converter/releases/tag/v1.13.1).
  
  This program is needed to show the cat image in *ASCII Art* format in the splash screen and when the application finnishes. It gives a little more *charm* to the reader, showing our little black cat reading a book, but if not installed, the Reader will still work normally.
  
-## Instalation
+## Installation
 
 ### 1. Clone this repository
 ```
-git clone
+git clone https://github.com/MorceNOX/cat-reader.git
 ```
+
+### 2. Install the dependencies
+
+#### 2.1 In Ubuntu / Debian based distros
+```
+sudo apt-get install build-essential bash pandoc poppler-utils jq newt alsa-utils libjson-c-dev
+```
+#### 2.2 In Fedora / CentOS / RedHat based distros
+```
+sudo dnf install gcc make bash pandoc poppler-utils jq newt alsa-utils json-c-devel
+```
+
+### 3. Build the Binary
+```
+cd cat-reader
+make -j$(nproc)
+make install-user
+sudo make install
+```
+
+## Run the Application
+
+Open your terminal and run:
+
+```
+cat-reader
+```
+Now you can intuitivelly navigate through the main menu, choose your language, config your voice models and select your documents or any text to be displayed in big letters and to be spoken out loud while you read the respective sentences.
+
+## How to Use
+
+Here are some screenshots followed by brief explanations. You can hit the **Help** option at any time in the **main menu** to get help.
+
+### 1. The Main Menu
+<img width="1920" height="1154" alt="00-initial_menu_screenshot" src="https://github.com/assets/00-initial_menu_screenshot.png" />
+
+### 2. The Reader Screen
+<img width="1920" height="1154" alt="01-the_reader_in_default_colors_screenshot" src="https://github.com/assets/01-initial_menu_screenshot.png" />
+
+<img width="1920" height="1154" alt="02-the_reader_white_over_gray_screenshot" src="https://github.com/assets/02-the_reader_white_over_gray_screenshot.png" />
+
+<img width="1920" height="1154" alt="03-the_reader_yellow_over_blue_screenshot" src="https://github.com/assets/03-the_reader_yellow_over_blue_screenshot.png" />
+
+### 3. The File Selector
+<img width="1920" height="1154" alt="04-the_file_selector_screenshot" src="https://github.com/assets/04-the_file_selector_screenshot.png" />
+
+### 4. The Language Selector
+<img width="1920" height="1154" alt="05-the_language_selector_screenshot" src="https://github.com/assets/05-the_language_selector_screenshot.png" />
+
+### 5. The Language Selector
+<img width="1920" height="1154" alt="06-the_voice_selector_screenshot" src="https://github.com/assets/06-the_voice_selector_screenshot.png" />
+
+
+
+
