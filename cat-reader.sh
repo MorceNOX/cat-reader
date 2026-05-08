@@ -34,7 +34,7 @@ PY_SPLIT_EXE=$(command -v ${INSTALL_PREFIX}/libexec/${APP_NAME}/split_sentences.
 
 # Define the list of options
 
-APP_SLOGAN="MorceNOX Art Reader - Making your reading a state of art!"
+APP_SLOGAN="MorceNOX C Art Text Reader - Making your reading a state of art!"
 
 create_centered_option() {
     local text="$1"
@@ -317,7 +317,7 @@ set_language() {
         lang_menu+=( "$l" " " )
     done
     
-    language=$(LC_ALL="en_GB.UTF-8" whiptail --title "Language Selection" --menu "Language of thr Text" 15 30 8 \
+    language=$(LC_ALL="en_GB.UTF-8" whiptail --title "Language Selection" --menu "Language of the Text" 15 30 8 \
                              --backtitle "$APP_SLOGAN" \
                             "${lang_menu[@]}" 3>&1 1>&2 2>&3)
                 
@@ -770,7 +770,7 @@ show_help() {
     local help_str+="$(cat "${CONFIG_DIR}/help.txt")"
 
     LANG="en_GB.UTF-8" && LC_ALL="en_GB.UTF-8" && \
-    whiptail --title "MorceNOX Art Reader - Help Screen!" \
+    whiptail --title "MorceNOX CAT Reader - Help Screen!" \
              --msgbox "${help_str}" \
              --backtitle "$APP_SLOGAN" \
              --scrolltext \
