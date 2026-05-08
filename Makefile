@@ -18,11 +18,16 @@ BINDIR     ?= $(PREFIX)/bin
 LIBEXECDIR ?= $(PREFIX)/libexec/$(APP_NAME)
 DATADIR = $(HOME)/.config/$(APP_NAME)
 
+# Release/Packaging Variables
+VERSION = 1.0.0
+PACKAGE_NAME = $(APP_NAME)-$(VERSION)
+DIST_DIR = release/$(PACKAGE_NAME)
+
 CFLAGS += -DDATADIR=\"$(DATADIR)\"
 CFLAGS += -DTARGET=\"$(TARGET)\"
 CFLAGS += -DAPP_NAME=\"$(APP_NAME)\"
 
-.PHONY: all clean run install uninstall install-user copy-libs
+.PHONY: all clean run install uninstall install-user copy-libs package
 
 all: $(TARGET)
 
@@ -86,3 +91,34 @@ install-user: $(TARGET)
 uninstall:
 	rm -f $(DESTDIR)$(BINDIR)/$(APP_NAME)
 	rm -rf $(DESTDIR)$(LIBEXECDIR)
+
+# --- PORTABLE RELEASE GENERATION ---
+# This creates a single folder containing everything needed to run without installing.
+package: clean $(TARGET)
+	@echo "Packaging $(PACKAGE_NAME)..."
+	mkdir -p $(DIST_DIR)/bin
+	mkdir -p $(DIST_DIR)/libexec
+	mkdir -p $(DIST_DIR)/lib/libpiper/lib64
+	mkdir -p $(DIST_DIR)/assets/models
+	mkdir -p $(DIST_DIR)/config
+
+#	1. Copy the engine and tools
+	cp $(TARGET) $(DIST_DIR)/libexec/$(TARGET)
+	cp $(SPLITTER) $(DIST_DIR)/libexec/$(SPLITTER)
+
+#	2. Copy the wrapper (we don't use sed here, we want it to be relocatable)
+	cp $(WRAPPER) $(DIST_DIR)/bin/$(APP_NAME)
+	chmod +x $(DIST_DIR)/bin/$(APP_NAME)
+
+#	3. Copy runtime libraries
+	cp -r lib/libpiper/* $(DIST_DIR)/lib/libpiper/
+
+#	4. Copy assets
+	cp -r assets/models/* $(DIST_DIR)/assets/models/ 2>/dev/null || true
+	cp -r assets/image.png $(DIST_DIR)/assets/ 2>/dev/null || true
+	cp -r assets/help.txt $(DIST_DIR)/assets/ 2>/dev/null || true
+	cp -r config/* $(DIST_DIR)/config/ 2>/dev/null || true
+
+#	5. Compress
+	tar -czvf $(PACKAGE_NAME).tar.gz -C release $(PACKAGE_NAME)
+	@echo "Done! Upload $(PACKAGE_NAME).tar.gz to GitHub Releases."

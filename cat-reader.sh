@@ -18,6 +18,8 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 APP_NAME="cat-reader"
 
 CONFIG_DIR="$HOME/.config/$APP_NAME"
@@ -27,10 +29,23 @@ OUT_TXT="$CONFIG_DIR/out_txt"
 # O endereço exato será "injetado" aqui durante a instalação
 INSTALL_PREFIX="/usr/local"
 
+
+# If the script is running from the 'bin' folder of your package, 
+# we point the LIBEXEC to the 'libexec' folder next to it.
+if [ -d "$SCRIPT_DIR/../libexec" ]; then
+    LIBEXECDIR="$SCRIPT_DIR/../libexec"
+    # For the package, we also want to point to the local lib folder
+    export LD_LIBRARY_PATH="$LIBEXECDIR/libpiper:$LIBEXECDIR/libpiper/lib64:$LD_LIBRARY_PATH"
+else
+    # Fallback to your original system-wide logic (for make install)
+    LIBEXECDIR="$INSTALL_PREFIX/libexec/$APP_NAME"
+fi
+
+
 # Detect if ctextreader is in PATH, otherwise use the local version
-CTEXT_EXE=$(command -v ${INSTALL_PREFIX}/libexec/${APP_NAME}/${APP_NAME}-engine 2>/dev/null || echo "./${APP_NAME}-engine")
+CTEXT_EXE=$(command -v ${LIBEXECDIR}/${APP_NAME}-engine 2>/dev/null || echo "./${APP_NAME}-engine")
 ASCII_IMAGE_EXE=$(command -v ascii-image-converter 2>/dev/null || echo "./ascii-image-converter")
-PY_SPLIT_EXE=$(command -v ${INSTALL_PREFIX}/libexec/${APP_NAME}/split_sentences.py 2>/dev/null || echo "./split_sentences.py")
+PY_SPLIT_EXE=$(command -v ${LIBEXECDIR}/split_sentences.py 2>/dev/null || echo "./split_sentences.py")
 
 # Define the list of options
 
