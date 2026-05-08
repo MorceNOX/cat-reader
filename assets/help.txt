@@ -104,7 +104,7 @@ Under the big bar, follows a normal bar showing the main shortcuts for navigatio
    Key    │ Action         │ Description                                  
 ──────────┼────────────────┼──────────────────────────────────────────────
 Space / P │ Play / Pause   │ Toggles the audio playback.                  
-  Q / ⎋   │ Quit           │ Immediately exits the application.           
+  Q / ⎋   │ Quit           │ Immediately exits the Reader.           
     ]     │ Increase Speed │ Makes the voice speak faster.                
     [     │ Decrease Speed │ Makes the voice speak slower.                
     {     │ Half Speed     │ Sets the playback speed to half.             
