@@ -148,3 +148,9 @@ sudo dnf install json-c-devel
  
  This program is needed to show the cat image in *ASCII Art* format in the splash screen and when the application finnishes. It gives a little more *charm* to the reader, showing our little black cat reading a book, but if not installed, the Reader will still work normally.
  
+## Instalation
+
+### 1. Clone this repository
+```
+git clone
+```
