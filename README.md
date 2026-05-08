@@ -144,7 +144,80 @@ sudo dnf install json-c-devel
 
  Just choose the version that fits your machine, extract the files and copy the binary to `/usr/local/bin`.
  
- Here is the link: [ascii-image-converter last release](https://github.com/TheZoraiz/ascii-image-converter/releases/tag/v1.13.1).
+ Here is the link to download it: [ascii-image-converter last release](https://github.com/TheZoraiz/ascii-image-converter/releases/tag/v1.13.1).
  
  This program is needed to show the cat image in *ASCII Art* format in the splash screen and when the application finnishes. It gives a little more *charm* to the reader, showing our little black cat reading a book, but if not installed, the Reader will still work normally.
  
+## Installation
+
+### 1. Clone this repository
+```
+git clone https://github.com/MorceNOX/cat-reader.git
+```
+
+### 2. Install the dependencies
+
+#### 2.1 In Ubuntu / Debian based distros
+```
+sudo apt-get install build-essential bash pandoc poppler-utils jq newt alsa-utils libjson-c-dev
+```
+#### 2.2 In Fedora / CentOS / RedHat based distros
+```
+sudo dnf install gcc make bash pandoc poppler-utils jq newt alsa-utils json-c-devel
+```
+
+### 3. Build the Binary
+```
+cd cat-reader
+make -j$(nproc)
+make install-user
+sudo make install
+```
+
+## Run the Application
+
+Open your terminal and run:
+
+```
+cat-reader
+```
+Now you can intuitivelly navigate through the main menu, choose your language, config your voice models and select your documents or any text to be displayed in big letters and to be spoken out loud while you read the respective sentences.
+
+## How to Use
+
+Here are some screenshots followed by brief explanations. You can hit the **Help** option at any time in the **main menu** to get help.
+
+### 1. The Main Menu
+![00-initial_menu_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/00-initial_menu_screenshot.png)
+
+### 2. The Reader Screen
+![01-the_reader_in_default_colors_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/01-the_reader_in_default_colors_screenshot.png)
+
+![02-the_reader_white_over_gray_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/02-the_reader_white_over_gray_screenshot.png)
+
+![03-the_reader_yellow_over_blue_screenshot](https://github.com/MorceNOX/cat-reader/blob/main/assets/03-the_reader_yellow_over_blue_screenshot.png)
+
+### 3. The File Selector
+![04-the_file_selector_screenshot](https://github.com/MorceNOX/cat-reader/blob/main/assets/04-the_file_selector_screenshot.png)
+
+### 4. The Language Selector
+![05-the_language_selector_screenshot](https://github.com/MorceNOX/cat-reader/blob/main/assets/05-the_language_selector_screenshot.png)
+
+### 5. The Voice Selector
+![06-the_voice_selector_screenshot](https://github.com/MorceNOX/cat-reader/blob/main/assets/06-the_voice_selector_screenshot.png)
+
+### 6. The Help Screen
+![07-the_help_screen_1_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/07-the_help_screen_1_screenshot.png)
+
+![08-the_help_screen_2_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/08-the_help_screen_2_screenshot.png)
+
+![09-the_help_screen_3_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/09-the_help_screen_3_screenshot.png)
+
+![10-the_help_screen_4_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/10-the_help_screen_4_screenshot.png)
+
+![11-the_help_screen_5_screenshot.png](https://github.com/MorceNOX/cat-reader/blob/main/assets/11-the_help_screen_5_screenshot.png)
+
+
+
+
+
