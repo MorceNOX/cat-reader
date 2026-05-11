@@ -25,13 +25,12 @@
 #include <locale.h>
 #include "string_helper.h"
 
-
 // Helper: Converts UTF-8 char* to wide char* (Unicode-aware)
 // This allows us to iterate through actual characters, not just bytes.
 wchar_t* utf8_to_wchar(const char* str) {
     if (!str) return NULL;
     setlocale(LC_ALL, ""); // Ensure locale is set for conversion
-    
+
     mbstate_t state = {0};
     // Determine required size for wide string
     size_t len = mbsrtowcs(NULL, &str, 0, &state);
@@ -49,11 +48,11 @@ wchar_t* utf8_to_wchar(const char* str) {
 char* wchar_to_utf8(const wchar_t* wstr) {
     if (!wstr) return NULL;
     setlocale(LC_ALL, "");
-    
+
     mbstate_t state = {0};
     size_txt:
     size_t len = wcslen(wstr);
-    
+
     // Allocate enough space (max 4 bytes per char + null)
     char* str = malloc((len * 4) + 1);
     if (!str) return NULL;
@@ -63,7 +62,7 @@ char* wchar_to_utf8(const wchar_t* wstr) {
         // wcrtomb converts one wide char to multibyte and returns bytes written
         size_t bytes_written = wcrtomb(dest, wstr[i], &state);
         if (bytes_written == (size_t)-1) {
-            *dest = '\0'; 
+            *dest = '\0';
             break;
         }
         dest += bytes_written; // Move the pointer by the ACTUAL number of bytes used
@@ -80,7 +79,7 @@ void get_substring(const char *source, int start, int len, char *buffer) {
     // Manually null-terminate the new string
     buffer[len] = '\0';
 }
-  
+
 // New, Unicode-aware substring function
 void get_substring_safe(const char *source, int start, int len, char *buffer) {
     if (!source || !buffer) return;
@@ -121,97 +120,117 @@ void get_substring_safe(const char *source, int start, int len, char *buffer) {
 }
 
 void removeConsecutiveSpaces(char* str) {
-  if (str == NULL) return;
+    if (str == NULL) return;
 
-  char* src = str;  // Source pointer to read
-  char* dst = str;  // Destination pointer to write
-  int lastWasSpace = 0;
+    char* src = str;  // Source pointer to read
+    char* dst = str;  // Destination pointer to write
+    int lastWasSpace = 0;
 
-  while (*src != '\0') {
-    if (*src == ' ') {
-      if (!lastWasSpace) {
-        *dst++ = *src;  // Copy only the first space found
-        lastWasSpace = 1;
-      }
-    } else {
-      *dst++ = *src;  // Copy all non-space characters
-      lastWasSpace = 0;
+    while (*src != '\0') {
+        if (*src == ' ') {
+            if (!lastWasSpace) {
+                *dst++ = *src;  // Copy only the first space found
+                lastWasSpace = 1;
+            }
+        } else {
+            *dst++ = *src;  // Copy all non-space characters
+            lastWasSpace = 0;
+        }
+        src++;
     }
-    src++;
-  }
 
-  *dst = '\0';  // Null-terminate the new shorter string
+    *dst = '\0';  // Null-terminate the new shorter string
 }
 
 int is_null_or_whitespace(char* str) {
-  if (str == NULL || str[0] == '\0') return 1;
+    if (str == NULL || str[0] == '\0') return 1;
 
-  while (*str) {
-    if (!isspace((unsigned char)*str) && !isblank((unsigned char)*str))
-      return 0;
-    str++;
-  }
-  return 1;
+    while (*str) {
+        if (!isspace((unsigned char)*str) && !isblank((unsigned char)*str))
+          return 0;
+        str++;
+    }
+    return 1;
 }
 
 char* trim(char* s) {
-  if (s == NULL) return NULL;  // Handle NULL pointer
-  if (*s == '\0') return s;    // Handle empty string
+    if (s == NULL) return NULL;  // Handle NULL pointer
+    if (*s == '\0') return s;    // Handle empty string
 
-  // 1. Trim trailing space
-  char* end = s + strlen(s) - 1;
-  while (end >= s && isspace((unsigned char)*end)) {
-    end--;
-  }
-  *(end + 1) = '\0';  // Truncate
+    // 1. Trim trailing space
+    char* end = s + strlen(s) - 1;
+    while (end >= s && isspace((unsigned char)*end)) {
+        end--;
+    }
+    *(end + 1) = '\0';  // Truncate
 
-  // 2. Trim leading space
-  char* start = s;
-  while (*start && isspace((unsigned char)*start)) {
-    start++;
-  }
+    // 2. Trim leading space
+    char* start = s;
+    while (*start && isspace((unsigned char)*start)) {
+        start++;
+    }
 
-  // 3. Shift remaining string
-  if (start != s) {
-    memmove(s, start, strlen(start) + 1);
-  }
+    // 3. Shift remaining string
+    if (start != s) {
+        memmove(s, start, strlen(start) + 1);
+    }
 
-  return s;
+    return s;
 }
 
 void print_repeat_char(char c, int n) {
-  char buffer[n + 1];
-  memset(buffer, c, n);
-  buffer[n] = '\0';
-  printf("%s", buffer);
+    char buffer[n + 1];
+    memset(buffer, c, n);
+    buffer[n] = '\0';
+    printf("%s", buffer);
 }
 
 void print_repeat_str(const char* s, int n) {
-  for (int i = 0; i < n; i++) {
-    printf("%s", s);
-  }
+    for (int i = 0; i < n; i++) {
+        printf("%s", s);
+    }
 }
 
 int text_to_argv(const char* text, char** argv, int max_args) {
-  if (text == NULL || argv == NULL || max_args <= 0) {
-    return 0;
-  }
+    if (text == NULL || argv == NULL || max_args <= 0) {
+        return 0;
+    }
 
-  int argc = 0;
-  char* temp_text = strdup(text);  // Make a copy to work with
-  char* saveptr = NULL;
+    int argc = 0;
+    char* temp_text = strdup(text);  // Make a copy to work with
+    char* saveptr = NULL;
 
-  // Tokenize the text by spaces
-  char* token = strtok_r(temp_text, " ", &saveptr);
-  while (token != NULL && argc < max_args - 1) {
-    argv[argc] = strdup(token);
-    argc++;
-    token = strtok_r(NULL, " ", &saveptr);
-  }
+    // Tokenize the text by spaces
+    char* token = strtok_r(temp_text, " ", &saveptr);
+    while (token != NULL && argc < max_args - 1) {
+        argv[argc] = strdup(token);
+        argc++;
+        token = strtok_r(NULL, " ", &saveptr);
+    }
 
-  argv[argc] = NULL;  // Null terminate the array
+    argv[argc] = NULL;  // Null terminate the array
 
-  free(temp_text);
-  temp_text = NULL;
-  return argc;
+    free(temp_text);
+    temp_text = NULL;
+    return argc;
+}
+
+void replace_substring(char *str, const char *old_sub, const char *new_sub, size_t max_len) {
+    char *pos = strstr(str, old_sub);
+    if (!pos) return; // Not found
+
+    size_t old_len = strlen(old_sub);
+    size_t new_len = strlen(new_sub);
+    size_t current_len = strlen(str);
+
+    // Ensure we don't overflow the buffer
+    if (current_len - old_len + new_len >= max_len) {
+        return; 
+    }
+
+    // Shift the remaining characters
+    memmove(pos + new_len, pos + old_len, strlen(pos + old_len) + 1);
+    
+    // Copy the new substring into the gap
+    memcpy(pos, new_sub, new_len);
 }

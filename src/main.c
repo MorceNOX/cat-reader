@@ -54,6 +54,11 @@ typedef struct {
     int count;
 } FileContent;
 
+typedef struct {
+    const char *symbol;
+    const char *name;
+} SymbolMap;
+
 // --- Globals ---
 struct termios orig_termios;
 int tty_fd = STDIN_FILENO;
@@ -67,6 +72,92 @@ FileContent content = {NULL, 0};
 struct dirent **langlist;
 int n_languages;
 char *lang = NULL;
+
+
+
+static const SymbolMap ASTRO_MAP[] = {
+    {"☉", "Sol"},
+    {"☾", "Luna"},
+    {"☿", "Mercurius"},
+    {"♀", "Venus"},
+    {"♂", "Mars"},
+    {"♃", "Jupiter"},
+    {"♄", "Saturnus"},
+    {"♅", "Uranus"},
+    {"♆", "Neptunus"},
+    {"⯓", "Pluto"},
+    {"♇", "Pluto"},
+    {"🜨", "Terra"},
+    {"🝴", "Fortuna"},
+    {"℞", "Retrogradus"},
+    {"☊", "Caput Draconis"},
+    {"☋", "Cauda Draconis"},
+    {"🜍", "Sulphur"},
+    {"🜔", "Sal"},
+    {"🜏", "Sulphur Nigrum"},
+    {"🜁", "Aer"},
+    {"🜃", "Terra"},
+    {"🜂", "Ignis"},
+    {"🜄", "Aqua"},
+    {"☌", "Conjunctio"},
+    {"☍", "Oppositio"},
+    {"△", "Trigonus"},
+    {"⚹", "Sextilis"},
+    {"□", "Quadratura"},
+    {NULL, NULL} 
+};
+
+
+char* sanitize_for_speech(const char *input) {
+    if (!input) return NULL;
+
+    // Start with a buffer large enough to hold the expansion
+    // We use a dynamic approach to ensure we don't overflow
+    size_t buffer_size = strlen(input) * 2 + 1; 
+    char *output = malloc(buffer_size);
+    if (!output) return NULL;
+    
+    output[0] = '\0';
+    const char *cursor = input;
+
+    while (*cursor != '\0') {
+        bool matched = false;
+
+        for (int i = 0; ASTRO_MAP[i].symbol != NULL; i++) {
+            size_t sym_len = strlen(ASTRO_MAP[i].symbol);
+            
+            // Check if the current cursor position matches the symbol
+            if (strncmp(cursor, ASTRO_MAP[i].symbol, sym_len) == 0) {
+                size_t name_len = strlen(ASTRO_MAP[i].name);
+                
+                // Ensure buffer has space: current length + new name + null terminator
+                if (strlen(output) + name_len + 1 > buffer_size) {
+                    buffer_size *= 2;
+                    output = realloc(output, buffer_size);
+                }
+
+                strcat(output, ASTRO_MAP[i].name);
+                cursor += sym_len; // Move cursor past the symbol
+                matched = true;
+                break;
+            }
+        }
+
+        if (!matched) {
+            // If no symbol matched, just copy the current byte
+            if (strlen(output) + 2 > buffer_size) {
+                buffer_size *= 2;
+                output = realloc(output, buffer_size);
+            }
+            size_t current_len = strlen(output);
+            output[current_len] = *cursor;
+            output[current_len + 1] = '\0';
+            cursor++;
+        }
+    }
+
+    return output;
+}
 
 // --- Audio Process Management ---
 void stop_current_audio() {
@@ -149,7 +240,7 @@ void free_resources() {
 }
 
 void cleanup_resources() {    
-    stop_current_audio();    
+    stop_current_audio();
 }
 
 void handle_signal(int sig) {
@@ -293,6 +384,9 @@ int process_single_line(char *line, const char *model_path, const char *json_pat
     }
 
     trim(line);
+
+    char *sanitized_line = sanitize_for_speech(line);
+    if (!sanitized_line) sanitized_line = strdup(line); // Fallback
     
     char* printer_argv[512];
     int printer_argc = text_to_argv(line, printer_argv, 512);
@@ -303,10 +397,12 @@ int process_single_line(char *line, const char *model_path, const char *json_pat
     
     if (pid < 0) {
         perror("fork failed");
+        free(sanitized_line);
         return -1;
     } else if (pid == 0) {
         setpgid(0, 0); 
-        talker(model_path, json_path, speaker, espeak_path, speed, line, volume);
+        talker(model_path, json_path, speaker, espeak_path, speed, sanitized_line, volume);
+        free(sanitized_line);
         exit(0);
     } else {
         current_audio_pgid = pid;
@@ -373,11 +469,13 @@ int process_single_line(char *line, const char *model_path, const char *json_pat
                     if (key == 'h' || key == 'H') return CMD_TOGGLE_HIGHLIGHT;
                     if (key == '-' || key == '/') return CMD_LOWER_VOLUME;
                     if (key == '=' || key == '+' || key == '*') return CMD_RAISE_VOLUME;
+                    if (key == 'k' || key == 'K') return CMD_COPY_TEXT; // prints the text in normal letters
                 }
             }
 
             usleep(10000); 
         }
+        free(sanitized_line);
         current_audio_pgid = 0;
         return 0;
     }
@@ -393,6 +491,7 @@ int filter_dots(const struct dirent *entry) {
 
 
 int main(int argc, char *argv[]) {
+
     tty_fd = open("/dev/tty", O_RDONLY);
     if (tty_fd < 0) tty_fd = STDIN_FILENO;
     
@@ -831,6 +930,8 @@ int main(int argc, char *argv[]) {
                 }
                 printf("\n[Volume= ×%.1f]\n", volume);
 
+            } else if (result == CMD_COPY_TEXT) {
+                printf("\nCurrent sentence:\n\n%s\n\n", content.lines[current_idx]);
             
             } else if (result == 0) {
                 // Line finished naturally

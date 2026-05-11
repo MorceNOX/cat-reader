@@ -251,6 +251,10 @@ const char** get_char_array(wchar_t c) {
         case L'“': return open_double_quote_7lines;
         case L'’': return close_single_quote_7lines;
         case L'”': return close_double_quote_7lines;
+        case L'↓': return arrow_down_7lines;
+        case L'←': return arrow_left_7lines;
+        case L'↑': return arrow_up_7lines;
+        case L'→': return arrow_right_7lines;
         case L'☉': return sol_7lines;
         case L'☾': return lua_7lines;
         case L'☿': return mercury_7lines;
@@ -259,11 +263,19 @@ const char** get_char_array(wchar_t c) {
         case L'♃': return jupiter_7lines;
         case L'♄': return saturno_7lines;
         case L'⯓': return pluto_7lines;
+        case L'♇': return Pluto_7lines;
         case L'♅': return urano_7lines;
         case L'♆': return netuno_7lines;
         case L'🜨': return terra_7lines;
         case L'🝴': return fortuna_7lines;
         case L'℞': return retrograde_7lines;
+        case L'☌': return conjunction_7lines;
+        case L'△': return trine_7lines;
+        case L'☍': return opposition_7lines;
+        case L'⚹': return sextile_7lines;
+        case L'□': return square_7lines;
+        case L'☊': return caput_draconis_7lines; // ascending node
+        case L'☋': return cauda_draconis_7lines; // descending node
         case L'\u2648': // Aries
             return aries_7lines;
         case L'\u2649': // Taurus
@@ -304,8 +316,6 @@ const char** get_char_array(wchar_t c) {
             return black_sulphur_7lines;
         case L'○': // white_circle
             return white_circle_7lines;
-        case L'□': // white_square
-            return white_square_7lines;
         case L'●': // black_circle
             return white_circle_7lines;
         case L'■': // black_square

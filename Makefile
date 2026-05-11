@@ -19,7 +19,7 @@ LIBEXECDIR ?= $(PREFIX)/libexec/$(APP_NAME)
 DATADIR = $(HOME)/.config/$(APP_NAME)
 
 # Release/Packaging Variables
-VERSION = 1.1.1
+VERSION = 1.4.1
 PACKAGE_NAME = $(APP_NAME)-$(VERSION)
 DIST_DIR = release/$(PACKAGE_NAME)
 
@@ -61,6 +61,7 @@ install: $(TARGET)
 	sed -e 's|BASE_PATH=.*|BASE_PATH="$(PREFIX)"|' \
 	    -e 's|INSTALL_PREFIX=.*|INSTALL_PREFIX="$(PREFIX)"|' \
 		-e 's|APP_NAME=.*|APP_NAME="$(APP_NAME)"|' \
+		-e 's|VERSION=.*|VERSION="$(VERSION)"|' \
 	    $(WRAPPER) > $(DESTDIR)$(BINDIR)/$(APP_NAME)
 	chmod +x $(DESTDIR)$(BINDIR)/$(APP_NAME)
 

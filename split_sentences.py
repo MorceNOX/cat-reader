@@ -37,7 +37,7 @@ def split_sentences_to_file(input_path, output_path):
     # followed by one or more whitespace characters.
     # The (?<=[.!?;:]) is a "positive lookbehind" - it checks if the 
     # preceding character is punctuation, but doesn't include it in the split.
-    sentences = re.split(r'(?<=[.!?;:])\s+', content)
+    sentences = re.split(r'(?<=[.!?;:”\"\]\)-])\s+', content)
 
     with open(output_path, 'w', encoding='utf-8') as f:
         for sentence in sentences:

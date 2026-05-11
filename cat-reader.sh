@@ -21,6 +21,20 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 APP_NAME="cat-reader"
+VERSION="X.X.X"
+
+# Check for version flags
+if [[ "$1" == "-v" ]] || [[ "$1" == "--version" ]]; then
+    echo "${APP_NAME} version ${VERSION}"
+    echo
+    echo "    MorceNOX CAT-Reader™ Copyright © 2026  Amilcar Antonio Mesquita Rizk"
+    echo "    This program comes with ABSOLUTELY NO WARRANTY; for details go to the 'help' option."
+    echo "    This is free software, and you are welcome to redistribute it"
+    echo "    under certain conditions; see <https://www.gnu.org/licenses/> for details."
+    echo
+    exit 0
+fi
+
 
 CONFIG_DIR="$HOME/.config/$APP_NAME"
 MODELS_DIR="$CONFIG_DIR/models"
@@ -74,7 +88,7 @@ create_centered_option() {
 
 raw_options=("Read a File" 
              "Read the Selected Text" 
-             "Format text file"  
+             "Convert and format to text"  
              "Select the Language"
              "Configure a Voice" 
              "Get a Voice Model"
@@ -97,9 +111,9 @@ text=("Read a text file or a document."
       "Show the help screen."
       "Exit the program.")
 
-msg=("Select a text file or a document. Documents will be converted to text." 
+msg=("Select a text file or a document and prepare yourself for the experience!" 
      "Select a text in your browser or another program and hit this option to read it." 
-     "A text file will be divided by sentences, one sentence per line." 
+     "Convert a file to text divided by sentences, one sentence per line." 
      "Here you define the language of the text to be read." 
      "Choose and configure the default voice for a selected language."
      "Select a downloaded voice model file to be copied to the config directory."
@@ -109,7 +123,7 @@ msg=("Select a text file or a document. Documents will be converted to text."
 
 commands=("readfile"
           "read_selection"
-          "format_text_file"
+          "formatfile"
           "set_language"
           "config_voice"
           "get_voice"
@@ -575,14 +589,150 @@ read_selection() {
     sleep 2
 }
 
+# conversion functions
+convert_epub_to_text() {
+    local input_file="$1"
+    local output_file="$2"
+    
+    pandoc -f epub -t plain --wrap=none --toc=false "$input_file" -o "$output_file"
+    return $?
+}
+
+convert_markdown_to_text() {
+    local input_file="$1"
+    local output_file="$2"
+    
+    pandoc -f markdown -t plain --wrap=none --toc=false "$input_file" -o "$output_file"
+    return $?
+}
+
+convert_html_to_text() {
+    local input_file="$1"
+    local output_file="$2"
+    
+    pandoc -f html -t plain --wrap=none --toc=false "$input_file" -o "$output_file"
+    return $?
+}
+
+convert_odt_to_text() {
+    local input_file="$1"
+    local output_file="$2"
+    
+    pandoc -f odt -t plain --wrap=none --toc=false "$input_file" -o "$output_file"
+    return $?
+}
+
+convert_pdf_to_text() {
+    local input_file="$1"
+    local output_file="$2"
+    
+    pdftotext -q -nopgbrk -enc UTF-8 -eol unix "$input_file" "$output_file"
+    return $?
+}
+
+convert_rtf_to_text() {
+    local input_file="$1"
+    local output_file="$2"
+    
+    pandoc -s -f rtf -t plain --wrap=none --toc=false "$input_file" -o "$output_file"
+    return $?
+}
+
+convert_docx_to_text() {
+    local input_file="$1"
+    local output_file="$2"
+    
+    pandoc -s -f docx -t plain --wrap=none --toc=false "$input_file" -o "$output_file"
+    return $?
+}
+
+# Split sentences function
+split_sentences() {
+    local input_file="$1"
+    local output_file="$2"
+    
+    "$PY_SPLIT_EXE" "$input_file" -o "$output_file"
+    return $?
+}
+
+# Process file with conversion
+process_file_with_conversion() {
+    local txtfile="$1"
+    local content_type="$2"
+    
+    case "$content_type" in
+        *epub*)
+            if ! convert_epub_to_text "$txtfile" "$OUT_TXT"/textfile; then
+                MESSAGE="⚠️ Error converting epub to text!"
+                cont=true
+                return 1
+            fi
+            ;;
+        *markdown*)
+            if ! convert_markdown_to_text "$txtfile" "$OUT_TXT"/textfile; then
+                MESSAGE="⚠️ Error converting markdown to text!"
+                cont=true
+                return 1
+            fi
+            ;;
+        *html*)
+            if ! convert_html_to_text "$txtfile" "$OUT_TXT"/textfile; then
+                MESSAGE="⚠️ Error converting html to text!"
+                cont=true
+                return 1
+            fi
+            ;;
+        *vnd.oasis.opendocument.text*)
+            if ! convert_odt_to_text "$txtfile" "$OUT_TXT"/textfile; then
+                MESSAGE="⚠️ Error converting odt to text!"
+                cont=true
+                return 1
+            fi
+            ;;
+        *pdf*)
+            if ! convert_pdf_to_text "$txtfile" "$OUT_TXT"/textfile; then
+                MESSAGE="⚠️ Error converting pdf to text!"
+                cont=true
+                return 1
+            fi
+            ;;
+        *rtf*)
+            if ! convert_rtf_to_text "$txtfile" "$OUT_TXT"/textfile; then
+                MESSAGE="⚠️ Error converting rtf to text!"
+                cont=true
+                return 1
+            fi
+            ;;
+        *vnd.openxmlformats-officedocument.wordprocessingml.document*)
+            if ! convert_docx_to_text "$txtfile" "$OUT_TXT"/textfile; then
+                MESSAGE="⚠️ Error converting docx to text!"
+                cont=true
+                return 1
+            fi
+            ;;
+        *)
+            # For plain text files, use directly
+            cp "$txtfile" "$OUT_TXT"/textfile
+            ;;
+    esac
+    
+    # Split sentences regardless of content type
+    if ! split_sentences "$OUT_TXT"/textfile "$OUT_TXT"/textfile_sentences.txt; then
+        MESSAGE="⚠️ Error splitting sentences!"
+        cont=true
+        return 1
+    fi    
+    
+}
+
 readfile() {
     txtfile=$(file_select "." \
-                          "text" \
-                          "application/epub" \
-                          "application/pdf" \
-                          "application/vnd.openxmlformats-officedocument.wordprocessingml.document" \
-                          "application/vnd.oasis.opendocument.text" \
-                          "text/html")
+                            "text" \
+                            "application/epub" \
+                            "application/pdf" \
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document" \
+                            "application/vnd.oasis.opendocument.text" \
+                            "text/html")
     
     if [[ -z "$txtfile" ]]; then
         MESSAGE="⚠️ No file selected!"
@@ -596,174 +746,63 @@ readfile() {
     
     content_type=$(file -b --mime-type "${txtfile}")
     
-    if [[ "$content_type" == *epub* ]]; then        
-        pandoc -f epub -t plain --wrap=none --toc=false "$txtfile" -o "$OUT_TXT"/textfile
-        if [ $? -ne 0 ]; then
-            MESSAGE="⚠️ Error converting epub to text!"
-            cont=true
-            return 1
-        fi
-
-        "$PY_SPLIT_EXE" "$OUT_TXT"/textfile -o "$OUT_TXT"/textfile_sentences.txt
-        if [ $? -ne 0 ]; then
-            MESSAGE="⚠️ Error splitting sentences!"
-            cont=true
-            return 1
-        fi
-
-        "$CTEXT_EXE" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
-        MESSAGE="⚠️ Thanks for reading!"
-
+    # Process the file with conversions
+    if ! process_file_with_conversion "$txtfile" "$content_type"; then
         cont=true
         sleep 2
-        return 0
-    
-    elif [[ "$content_type" == *markdown* ]]; then
-        pandoc -f markdown -t plain --wrap=none --toc=false "$txtfile" -o "$OUT_TXT"/textfile
-        if [ $? -ne 0 ]; then
-            MESSAGE="⚠️ Error converting markdown to text!"
-            cont=true
-            return 1
-        fi
-
-        "$PY_SPLIT_EXE" "$OUT_TXT"/textfile -o "$OUT_TXT"/textfile_sentences.txt
-        if [ $? -ne 0 ]; then
-            MESSAGE="⚠️ Error splitting sentences!"
-            cont=true
-            return 1
-        fi
-
-        "$CTEXT_EXE" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
-
-        MESSAGE="⚠️ Thanks for reading!"
-
-        cont=true
-        sleep 2
-        return 0
-
-    elif [[ "$content_type" == *html* ]]; then
-        pandoc -f html -t plain --wrap=none --toc=false "$txtfile" -o "$OUT_TXT"/textfile
-        if [ $? -ne 0 ]; then
-            MESSAGE="⚠️ Error converting html to text!"
-            cont=true
-            return 1
-        fi
-
-        "$PY_SPLIT_EXE" "$OUT_TXT"/textfile -o "$OUT_TXT"/textfile_sentences.txt
-        if [ $? -ne 0 ]; then
-            MESSAGE="⚠️ Error splitting sentences!"
-            cont=true
-            return 1
-        fi
-
-        "$CTEXT_EXE" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
-
-        MESSAGE="⚠️ Thanks for reading!"
-
-        cont=true
-        sleep 2
-        return 0
-
-    elif [[ "$content_type" == *vnd.oasis.opendocument.text* ]]; then
-        pandoc -f odt -t plain --wrap=none --toc=false "$txtfile" -o "$OUT_TXT"/textfile
-        if [ $? -ne 0 ]; then
-            MESSAGE="⚠️ Error converting odt to text!"
-            cont=true
-            return 1
-        fi
-
-        "$PY_SPLIT_EXE" "$OUT_TXT"/textfile -o "$OUT_TXT"/textfile_sentences.txt
-        if [ $? -ne 0 ]; then
-            MESSAGE="⚠️ Error splitting sentences!"
-            cont=true
-            return 1
-        fi
-
-        "$CTEXT_EXE" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
-
-        MESSAGE="⚠️ Thanks for reading!"
-
-        cont=true
-        sleep 2
-        return 0
-
-    elif [[ "$content_type" == *pdf* ]]; then
-        pdftotext -q -nopgbrk -enc UTF-8 -eol unix "$txtfile" "$OUT_TXT"/textfile
-        if [ $? -ne 0 ]; then
-            MESSAGE="⚠️ Error converting pdf to text!"
-            cont=true
-            return 1
-        fi
-
-        "$PY_SPLIT_EXE" "$OUT_TXT"/textfile -o "$OUT_TXT"/textfile_sentences.txt
-        if [ $? -ne 0 ]; then
-            MESSAGE="⚠️ Error splitting sentences!"
-            cont=true
-            return 1
-        fi
-
-        "$CTEXT_EXE" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
-        MESSAGE="⚠️ Thanks for reading!"
-
-        cont=true
-        sleep 2
-        return 0
-
-    elif [[ "$content_type" == *rtf* ]]; then
-        pandoc -s -f rtf -t plain --wrap=none --toc=false "$txtfile" -o "$OUT_TXT"/textfile
-        if [ $? -ne 0 ]; then
-            MESSAGE="⚠️ Error converting rtf to text!"
-            cont=true
-            return 1
-        fi
-
-        "$PY_SPLIT_EXE" "$OUT_TXT"/textfile -o "$OUT_TXT"/textfile_sentences.txt
-        if [ $? -ne 0 ]; then
-            MESSAGE="⚠️ Error splitting sentences!"
-            cont=true
-            return 1
-        fi
-
-        "$CTEXT_EXE" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
-
-        MESSAGE="⚠️ Thanks for reading!"
-
-        cont=true
-        sleep 2
-        return 0
-
-    elif [[ "$content_type" == *vnd.openxmlformats-officedocument.wordprocessingml.document* ]]; then
-        pandoc -s -f docx -t plain --wrap=none --toc=false "$txtfile" -o "$OUT_TXT"/textfile
-        if [ $? -ne 0 ]; then
-            MESSAGE="⚠️ Error converting docx to text!"
-            cont=true
-            return 1
-        fi
-
-        "$PY_SPLIT_EXE" "$OUT_TXT"/textfile -o "$OUT_TXT"/textfile_sentences.txt
-        if [ $? -ne 0 ]; then
-            MESSAGE="⚠️ Error splitting sentences!"
-            cont=true
-            return 1
-        fi
-
-        
-        "$CTEXT_EXE" -l $language "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
-
-        MESSAGE="⚠️ Thanks for reading!"
-
-        cont=true
-        sleep 2
-        return 0
+        return 1
     fi
+
+    # Read the converted file
+    "$CTEXT_EXE" -l "$language" "$OUT_TXT"/textfile_sentences.txt 2>/dev/null
     
-    "$CTEXT_EXE" -l $language "$txtfile" 2>/dev/null
     MESSAGE="⚠️ Thanks for reading!"
-    
     cont=true
     sleep 2
+    return 0
 }
 
+formatfile() {
+    txtfile=$(file_select "." \
+                            "text" \
+                            "application/epub" \
+                            "application/pdf" \
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document" \
+                            "application/vnd.oasis.opendocument.text" \
+                            "text/html")
+    
+    if [[ -z "$txtfile" ]]; then
+        MESSAGE="⚠️ No file selected!"
+        cont=true
+        return 1
+    fi
+    
+    if ! $language_set_by_user; then
+        set_language
+    fi
+    
+    content_type=$(file -b --mime-type "${txtfile}")
+    
+    # Process the file with conversions
+    if ! process_file_with_conversion "$txtfile" "$content_type"; then
+        cont=true
+        sleep 2
+        return 1
+    fi
+
+    cp "$OUT_TXT"/textfile_sentences.txt "${txtfile%.*}"_sentences.txt
+
+    if [[ -z "${txtfile%.*}"_sentences.txt ]] then
+       MESSAGE="⚠️ No file generated! Check for errors!"
+       cont=true
+       sleep 2
+       return 1 
+    fi
+        
+    MESSAGE="⚠️ File ${txtfile%.*}_sentences.txt generated!"
+    cont=true
+    sleep 2   
+}
 
 format_text_file() {
     txtfile=$(file_select "." "text")
@@ -829,7 +868,7 @@ LOGO=("                 ▖  ▖        ▖ ▖▄▖▖▖TM"
       " ▗▄▄▖      ▗▄▄▄▖ ▌▝ ▌▙▌▌ ▙▖▙▖▌▝▌▙▌▌▌  "
       "▐▌    ┏┓     █     ▗  ▄▖     ▌        "
       "▐▌    ┣┫┏┓╋  █ █▌▚▘▜▘ ▙▘█▌▀▌▛▌█▌▛▘    "
-      "▝▚▄▄▖ ┛┗┛ ┗  █ ▙▖▞▖▐▖ ▌▌▙▖█▌▙▌▙▖▌     ")
+      "▝▚▄▄▖ ┛┗┛ ┗  █ ▙▖▞▖▐▖ ▌▌▙▖█▌▙▌▙▖▌  V.${VERSION}")
 
 SLOGAN=("╭┬╮╭─╮╷╭ ╷╭╮╷╭─╴   ╶┬╴╷ ╷╭─╴   ╭─╮╭─╴╭─╮╶┬╮╷╭╮╷╭─╴   ╭─╮   ╭─╮╶┬╴╭─╮╶┬╴╭─╴   ╭─╮╭─╴   ╭─╮╭─╮╶┬╴"
         "┃┃┃┣━┫┣┻┓┃┃┗┫┃╺┓    ┃ ┣━┫┣╸    ┣┳┛┣╸ ┣━┫ ┃┃┃┃┗┫┃╺┓   ┣━┫   ┗━┓ ┃ ┣━┫ ┃ ┣╸    ┃ ┃┣╸    ┣━┫┣┳┛ ┃ "
@@ -1006,7 +1045,7 @@ clear
 "$ASCII_IMAGE_EXE" "${CONFIG_DIR}/image.png" -f -b --threshold 96 -C --color-bg 2>/dev/null
 echo "$APP_SLOGAN Thanks for reading with us!"
 echo
-echo "    MorceNOX Art-Reader™ Copyright © 2026  Amilcar Antonio Mesquita Rizk"
+echo "    MorceNOX CAT-Reader™ Copyright © 2026  Amilcar Antonio Mesquita Rizk"
 echo "    This program comes with ABSOLUTELY NO WARRANTY; for details go to the 'help' option."
 echo "    This is free software, and you are welcome to redistribute it"
 echo "    under certain conditions; see <https://www.gnu.org/licenses/> for details."
