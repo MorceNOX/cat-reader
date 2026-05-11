@@ -201,9 +201,9 @@ print_status_bar() {
     printf "\r"
 
     
-
-    echo -en "┃\e[1m Selected language:\e[22m\e[33;40m $language ${COLOR_BAR}┃ \e[1mText selected?\e[22m\e[33;40m $(if $TEXT_SELECTED; then echo "yes"; else echo "no "; fi) \e[22m${COLOR_BAR}┃ \e[1mMsg: \e[22m\e[3m${COLOR_TEXT_OPTION_BAR}$(if [[ "${menu_text}" == *"⚠️"* ]]; then echo -e " "; fi)${menu_text} ${COLOR_BAR}"
-    print_bg_line $(( COLS - 54 - "${#menu_text}" - 1 ))
+    local fmt_text="$(truncate_with_ellipsis "${menu_text}" 59)"
+    echo -en "┃\e[1m Selected language:\e[22m\e[33;40m $language ${COLOR_BAR}┃ \e[1mText selected?\e[22m\e[33;40m $(if $TEXT_SELECTED; then echo "yes"; else echo "no "; fi) \e[22m${COLOR_BAR}┃ \e[1mMsg: \e[22m\e[3m${COLOR_TEXT_OPTION_BAR}$(if [[ "${menu_text}" == *"⚠️"* ]]; then echo -e " "; fi)${fmt_text} ${COLOR_BAR}"
+    print_bg_line $(( COLS - 54 - "${#fmt_text}" - 1 ))
     echo -e "┃$COLOR_MENU_SHADOW${COLOR_BACKGROUND}▌"
     
     echo -en "${COLOR_BAR}┗"
@@ -799,7 +799,7 @@ formatfile() {
        return 1 
     fi
         
-    MESSAGE="⚠️ File ${txtfile%.*}_sentences.txt generated!"
+    MESSAGE="⚠️ File $(basename "${txtfile%.*}_sentences.txt generated!")"
     cont=true
     sleep 2   
 }
@@ -822,7 +822,7 @@ format_text_file() {
        return 1 
     fi
         
-    MESSAGE="⚠️ File ${txtfile%.*}_sentences.txt generated!"
+    MESSAGE="⚠️ File $(basename "${txtfile%.*}_sentences.txt generated!")"
     cont=true
     sleep 2
 }

@@ -481,7 +481,7 @@ int printer(int argc, char* argv[], int line_num, int n_lines, const char *langu
     printf("\e[37;40m");
     print_repeat_str(" ", terminal_width);
     printf("\r");
-    printf(" ◀◀(S)◀(A) │ (P)▶⏸ │ (D)▶(W)▶▶ ┃ (Q)(⎋) Quit ┃ (B)Bold (N)Dim (H)High ┃ 🐇 (])+ ([)- (⌫)⮌ ┃ 🔊(+/-) ┃ (X)(C)🎨 ┃ (L)🌐\n");
+    printf(" S)◀◀ A)◀ │ P)▶⏸ │ D)▶ W)▶▶ ┃ Q|⎋)Quit ┃ B)Bold N)Dim H)High ┃ 🐇 ]+ [- ⌫)⮌ ┃ 🔊 +/- ┃ 🎨 X,C ┃ L)🌐\n");
     
     printf("\e[0m");
     printf("\e[48;5;16m");

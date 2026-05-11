@@ -57,6 +57,7 @@ When in the immersive Reader mode, these shortcuts allow you to navigate, contro
 | **N** | Toggle Dim              | Applies or removes dim formatting.                           |
 | **H** | Toggle Highlight        | Applies or removes a highlight effect.                       |
 | **L** | Cycle Languages         | Quickly switches the language setting without returning to the main menu. |
+| **K** | Print Sentence          | Prints the current sentence in normal letters, allowing copy the text. |
 
 ## 🤔 Why `cat-reader`?
 
@@ -136,9 +137,13 @@ This is **The Reader**, Your terminal dimensions will determine the size and the
 
 ![01-the_reader_in_default_colors_screenshot.png](assets/01-the_reader_in_default_colors_screenshot.png)
 
+![01a-the_reader_in_default_colors_screenshot.png](assets/01a-the_reader_in_default_colors_screenshot.png)
+
 ![02-the_reader_white_over_gray_screenshot.png](assets/02-the_reader_white_over_gray_screenshot.png)
 
 ![03-the_reader_yellow_over_blue_screenshot](assets/03-the_reader_yellow_over_blue_screenshot.png)
+
+![03a-the_reader_yellow_over_gray_screenshot](assets/03a-the_reader_yellow_over_gray_screenshot.png)
 
 ### 3. The File Selector
 
