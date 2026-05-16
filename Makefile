@@ -12,6 +12,7 @@ APP_NAME = cat-reader
 TARGET = $(APP_NAME)-engine
 WRAPPER = $(APP_NAME).sh
 SPLITTER = split_sentences.py
+LUA_FILTER = preserve_images.lua
 
 PREFIX     ?= /usr/local
 BINDIR     ?= $(PREFIX)/bin
@@ -19,7 +20,7 @@ LIBEXECDIR ?= $(PREFIX)/libexec/$(APP_NAME)
 DATADIR = $(HOME)/.config/$(APP_NAME)
 
 # Release/Packaging Variables
-VERSION = 1.4.2
+VERSION = 1.5.0
 PACKAGE_NAME = $(APP_NAME)-$(VERSION)
 DIST_DIR = release/$(PACKAGE_NAME)
 
@@ -84,6 +85,8 @@ install-user: $(TARGET)
 
 #	Copy the help.txt file from your project's assets dir to the user's DATADIR
 	cp -r assets/help.txt $(DATADIR)/
+
+	cp $(LUA_FILTER) $(DATADIR)/
 
 #	Copy default configs from your project's config dir to the user's DATADIR
 	if [ -d config ]; then cp -r config/* $(DATADIR)/ 2>/dev/null || true; fi

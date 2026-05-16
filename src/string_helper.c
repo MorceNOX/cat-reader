@@ -234,3 +234,14 @@ void replace_substring(char *str, const char *old_sub, const char *new_sub, size
     // Copy the new substring into the gap
     memcpy(pos, new_sub, new_len);
 }
+
+void print_encoded(const char *str) {
+    while (*str) {
+        if (*str == ' ') {
+            fputs("%20", stdout); // Imprime %20 sem perigo de quebrar o printf
+        } else {
+            putchar(*str);
+        }
+        str++;
+    }
+}

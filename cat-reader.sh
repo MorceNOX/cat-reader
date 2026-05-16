@@ -594,7 +594,7 @@ convert_epub_to_text() {
     local input_file="$1"
     local output_file="$2"
     
-    pandoc -f epub -t plain --wrap=none --toc=false "$input_file" -o "$output_file"
+    pandoc -f epub -t plain --lua-filter="$CONFIG_DIR"/preserve_images.lua --extract-media="$OUT_TXT"/images --link-images --wrap=none --toc=false "$input_file" -o "$output_file"
     return $?
 }
 
@@ -602,7 +602,7 @@ convert_markdown_to_text() {
     local input_file="$1"
     local output_file="$2"
     
-    pandoc -f markdown -t plain --wrap=none --toc=false "$input_file" -o "$output_file"
+    pandoc -f markdown -t plain --lua-filter="$CONFIG_DIR"/preserve_images.lua --extract-media="$OUT_TXT"/images --link-images --wrap=none --toc=false "$input_file" -o "$output_file"
     return $?
 }
 
@@ -610,7 +610,7 @@ convert_html_to_text() {
     local input_file="$1"
     local output_file="$2"
     
-    pandoc -f html -t plain --wrap=none --toc=false "$input_file" -o "$output_file"
+    pandoc -f html -t plain --lua-filter="$CONFIG_DIR"/preserve_images.lua --extract-media="$OUT_TXT"/images --link-images --wrap=none --toc=false "$input_file" -o "$output_file"
     return $?
 }
 
@@ -618,7 +618,7 @@ convert_odt_to_text() {
     local input_file="$1"
     local output_file="$2"
     
-    pandoc -f odt -t plain --wrap=none --toc=false "$input_file" -o "$output_file"
+    pandoc -f odt -t plain --lua-filter="$CONFIG_DIR"/preserve_images.lua --extract-media="$OUT_TXT"/images --link-images --wrap=none --toc=false "$input_file" -o "$output_file"
     return $?
 }
 
@@ -642,7 +642,7 @@ convert_docx_to_text() {
     local input_file="$1"
     local output_file="$2"
     
-    pandoc -s -f docx -t plain --wrap=none --toc=false "$input_file" -o "$output_file"
+    pandoc -s -f docx -t plain --lua-filter="$CONFIG_DIR"/preserve_images.lua --extract-media="$OUT_TXT"/images --link-images --wrap=none --toc=false "$input_file" -o "$output_file"
     return $?
 }
 
@@ -652,6 +652,7 @@ split_sentences() {
     local output_file="$2"
     
     "$PY_SPLIT_EXE" "$input_file" -o "$output_file"
+    sed -E "s/\s\[Image\:/\n\[Image\:/g" -i "$output_file"
     return $?
 }
 

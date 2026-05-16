@@ -30,4 +30,5 @@ char* trim(char* s);
 void print_repeat_char(char c, int n);
 void print_repeat_str(const char* s, int n);
 int text_to_argv(const char* text, char** argv, int max_args);
+void print_encoded(const char *str);
 #endif

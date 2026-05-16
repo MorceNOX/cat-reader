@@ -791,6 +791,47 @@ int main(int argc, char *argv[]) {
         print_repeat_str("─", get_terminal_width());
         
         while (current_idx >= 0 && current_idx < content.count) {
+
+            // Check if the current line is an image link: [Image: path/to/image]
+            if (strncmp(content.lines[current_idx], "[Image: ", 8) == 0) {
+                char *closing_bracket = strchr(content.lines[current_idx], ']');
+                
+                if (closing_bracket != NULL) {
+                    // Extract the path between "[Image: " and "]"
+                    char image_path[512];
+                    const char *start_of_path = content.lines[current_idx] + 8;
+                    size_t path_len = closing_bracket - start_of_path;
+
+                    if (path_len < sizeof(image_path)) {
+                        strncpy(image_path, start_of_path, path_len);
+                        image_path[path_len] = '\0';
+
+                        // Prepare the command for ascii-image-converter
+                        // We wrap the path in quotes in case the filename contains spaces
+                        char cmd[1024];
+                        snprintf(cmd, sizeof(cmd), 
+                                 "ascii-image-converter -b --threshold 96 -C --color-bg \"%s/%s/%s\" 2>/dev/null", 
+                                 config_path, "out_txt/images", image_path);
+
+                        // Execute the converter
+                        system(cmd);
+                        
+                        //printf("\nImage: file://%s/%s/%s\n", config_path, "out_txt/images", image_path);
+                        printf("\nImage: file://");
+                        print_encoded(config_path);
+                        printf("/");
+                        print_encoded("out_txt/images"); // Opcional, caso mude no futuro
+                        printf("/");
+                        print_encoded(image_path);
+                        printf("\n");
+                        
+                        // Advance the index and skip the text processing for this line
+                        current_idx++;
+                        continue; 
+                    }
+                }
+            }
+
             int result = process_single_line(content.lines[current_idx], 
                                              getenv("PIPER_VOICE_MODEL"), 
                                              getenv("PIPER_VOICE_JSON"), 
