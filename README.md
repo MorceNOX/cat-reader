@@ -14,6 +14,7 @@ This is, by far, the most comfortable way to read a book and to be engaged in yo
 
 *   **Versatile Input:** Reads almost anything! Supports plain text, and complex formats like `epub`, `markdown`, `docx`, `odt`, `rtf`, `html`, and even text extracted from `pdf` files.
 *   **Simultaneous Reading & Listening:** As the text scrolls in big ASCII Art, the sentence is spoken aloud in your chosen language via the integrated Piper TTS engine.
+*   **Images in ASCII Art Format:** When existing, images will be displayed colored in ASCII Art format.
 *   **Total Control:** Fine-tune the reading experience with controls for audio speed, volume, language, and visual appearance (colors, bold, dim, highlight).
 *   **Seamless Navigation:** Move through the text sentence-by-sentence, or jump large blocks forward or backward using intuitive keyboard shortcuts.
 *   **Resource Efficient:** Built in C, ensuring it runs quickly and without hogging your machine resources.
@@ -110,6 +111,12 @@ sudo dnf install gcc make bash pandoc poppler-utils jq newt json-c-devel sdl2-co
     make install-user
     sudo make install
     ```
+
+4. You also need the `ascii-image-converter` to show images in ASCII Art format, when they are available.
+
+In this repository: [ascii-image-converter](https://github.com/TheZoraiz/ascii-image-converter.git) you can download the last version which fits with your environment and copy it to the `/usr/local/bin` directory.
+
+Done that and `cat-reader` will call it to display images.
 
 ## 📖 How to Use
 
